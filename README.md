@@ -1,5 +1,11 @@
 # BrainBoost
 
+<img src="https://user-images.githubusercontent.com/62642796/227766262-4059e3bf-f536-418c-8e80-2f0d7359d06d.png" 
+        alt="Picture" 
+        width="400" 
+        height="222" 
+        style="display: block; margin: 0 auto" />
+
 ## Članovi:
 * Berin Karahodžić
 * Imran Spahić
