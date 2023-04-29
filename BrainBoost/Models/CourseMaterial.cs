@@ -20,7 +20,7 @@ namespace BrainBoost.Models
 
     public enum FileType
     {
-        type1,type2,type3    
+        PDF,DOCX,PNG,JPG,PPTX    
     }
 }
 
