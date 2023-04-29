@@ -4,7 +4,7 @@ namespace BrainBoost.Models
 {
     public class Email
     {
-        public string Id { get; private set; }
+        public string Id { get;}
         public string RecipientEmail { get; set; }
         public string Subject { get; set; }
         public string Content { get; set; }

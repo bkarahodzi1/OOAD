@@ -5,8 +5,8 @@ namespace BrainBoost.Models
 {
     public class CourseMaterial
     {
-        public string Id { get; set; }
-        public string CourseId { get; set; }
+        public string Id { get; }
+        public string CourseId { get;  }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Content { get; set; }

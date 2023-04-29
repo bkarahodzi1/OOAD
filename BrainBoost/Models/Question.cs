@@ -5,7 +5,7 @@ namespace BrainBoost.Models
 {
     public class Question
     {
-        public string Id { get; set; }
+        public string Id { get;  }
         public string QuestionText { get; set; }
         public string Description { get; set; }
         public List<QuestionAnswer>? Answers { get; set; }

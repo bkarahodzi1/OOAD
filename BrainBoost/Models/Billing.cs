@@ -4,7 +4,7 @@ namespace BrainBoost.Models
 {
     public class Billing
     {
-        public string SessionId { get; set; }
+        public string SessionId { get; }
         public User User { get; set; }
         public BillingCard BillingCard { get; set; }
         public Course Course { get; set; }
