@@ -13,4 +13,3 @@ namespace BrainBoost.Models
         public int Hours { get; set; }
     }
 }
-}
