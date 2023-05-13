@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-BrainBoost-53e8f609-4276-43bd-a441-d6e9edf9fd0a</UserSecretsId>
   </PropertyGroup>
 
