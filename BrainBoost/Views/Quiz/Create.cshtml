@@ -1,0 +1,46 @@
+@model BrainBoost.Models.Quiz
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Quiz</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CourseMaterialId" class="control-label"></label>
+                <select asp-for="CourseMaterialId" class ="form-control" asp-items="ViewBag.CourseMaterialId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedById" class="control-label"></label>
+                <select asp-for="CreatedById" class ="form-control" asp-items="ViewBag.CreatedById"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuizName" class="control-label"></label>
+                <input asp-for="QuizName" class="form-control" />
+                <span asp-validation-for="QuizName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
