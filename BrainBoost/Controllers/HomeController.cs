@@ -20,7 +20,7 @@ namespace BrainBoost.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View("HomeCourses");
         }
 
         public IActionResult Privacy()
@@ -33,5 +33,6 @@ namespace BrainBoost.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
