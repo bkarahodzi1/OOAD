@@ -19,9 +19,10 @@ namespace BrainBoost.Controllers
             _logger = logger;
         }
 
+        //Landing page
         public IActionResult Index()
         {
-            return View("HomeCourses");
+            return View();
         }
 
         public IActionResult Privacy()
