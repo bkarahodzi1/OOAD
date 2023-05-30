@@ -1,0 +1,53 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;700&display=swap');
+
+body {
+    background-color: rgb(242, 244, 245);
+    margin: 0;
+    background-image: url("https://img.rawpixel.com/private/static/images/website/2022-05/pf-s124-ak-2615_2.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=c77077de245e55401603da8711ee87a7");
+    background-repeat: no-repeat;
+    background-size: cover
+}
+
+.grid-container {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    width: auto;
+    height: calc(100vh - 120px);
+    grid-auto-flow: column;
+    align-items: center;
+    justify-items: center;
+    grid-gap: 50px
+}
+
+p {
+    font-family: Ubuntu;
+    font-size: 20px;
+    color: rgb(49, 54, 56);
+    margin: 0
+}
+
+h1 {
+    font-family: Ubuntu;
+    font-size: 50px;
+    line-height: 1.3;
+    margin-bottom: 50px;
+    font-weight: bold
+}
+
+p {
+    line-height: 1.5;
+}
+
+.header {
+    height: 60px;
+}
+
+.footer {
+    background-color: white;
+    height: 60px;
+}
+
+.landing-description {
+    margin-right: 60px;
+}
