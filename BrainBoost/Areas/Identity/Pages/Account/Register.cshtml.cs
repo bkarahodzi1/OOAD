@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using BrainBoost.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private ApplicationDbContext context;
         //private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
@@ -30,12 +32,14 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender/*,
-            RoleManager<IdentityRole> roleManager*/)
+            RoleManager<IdentityRole> roleManager*/,
+            ApplicationDbContext c)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            context = c;
             //_roleManager = roleManager;
         }
 
@@ -98,10 +102,44 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             {
                 var user = new IdentityUser { UserName = Input.Username, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                Console.WriteLine(Input.FirstName);
                 if (result.Succeeded)
                 {
+                    string combo = Request.Form["role"].ToString();
+                    if (combo == "Student")
+                    {
+                        Models.User u = new Models.Student();
+                        u.FirstName = Input.FirstName;
+                        u.LastName = Input.LastName;
+                        u.Email = Input.Email;
+                        u.BirthDate = Input.BirthDate;
+                        u.CreatedAt = DateTime.Now;
+                        u.IsVerified = true;
+                        u.Username = Input.Username;
+                        context.User.Add(u);
+                    }
+                    else
+                    {
+                        Models.User u = new Models.Professor();
+                        u.FirstName = Input.FirstName;
+                        u.LastName = Input.LastName;
+                        u.Email = Input.Email;
+                        u.BirthDate = Input.BirthDate;
+                        u.CreatedAt = DateTime.Now;
+                        u.IsVerified = true;
+                        u.Username = Input.Username;
+                        context.User.Add(u);
+                    }
+                    context.SaveChanges();
 
+                    var rola = await _userManager.FindByNameAsync(Input.Username);
+                    if (rola == null)
+                    {
+                        //Error handler
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(rola, combo);
+                    }
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
