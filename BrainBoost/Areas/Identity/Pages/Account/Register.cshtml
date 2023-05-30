@@ -1,0 +1,102 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    .form-container {
+        column-count: 2; /* Adjust the number of columns as needed */
+        column-gap: 20px; /* Add spacing between columns if desired */
+    }
+
+    .break {
+        grid-column: 1 / -1; /* Span across all columns */
+        margin-top: 20px; /* Adjust the margin as desired */
+    }
+
+    .cancel-button {
+        display: inline-block;
+        width: 100%;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: normal;
+        text-align: center;
+        text-decoration: none;
+        background-color: #f44336; /* Light red color */
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 9px;
+    }
+
+    .cancel-button:hover {
+        background-color: #d32f2f; /* Darker shade of red on hover */
+    }
+</style>
+
+<div class="form-container">
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div>
+            <!-- First set of fields -->
+            <h2>@ViewData["Title"]</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <label asp-for="Input.Username"></label>
+                <input asp-for="Input.Username" class="form-control" autocomplete="off" aria-required="true" />
+                <span asp-validation-for="Input.Username" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="off" aria-required="true" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="off" aria-required="true" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="off" aria-required="true" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div><br />
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </div>
+        <div class="break"></div> <!-- Break element -->
+        <div>
+            <!-- Second set of fields -->
+            <h2>Personal information</h2>
+            <hr />
+            <div class="form-floating">
+                <label asp-for="Input.FirstName"></label>
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="off" aria-required="true" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" autocomplete="off" aria-required="true" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <label asp-for="Input.BirthDate"></label><br />
+            <input type="date" asp-for="Input.BirthDate" />
+            <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+            <div class="form-floating">
+                <label asp-for="Input.Role"></label>
+            </div>
+            <select asp-for="Input.Role" name="role" class="form-control">
+                <option value="Student">Student</option>
+                <option value="Professor">Professor</option>
+            </select><br/>
+            <button class="cancel-button" onclick="window.location='https://localhost:44324/';return false;">Cancel</button>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
