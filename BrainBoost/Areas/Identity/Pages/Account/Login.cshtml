@@ -5,9 +5,20 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
+    .form-container {
+        column-count: 2; /* Adjust the number of columns as needed */
+        column-gap: 20px; /* Add spacing between columns if desired */
+    }
+
+    .break {
+        grid-column: 1 / -1; /* Span across all columns */
+        margin-top: 20px; /* Adjust the margin as desired */
+    }
+</style>
+
 <div class="row">
-    <div class="col-md-4">
+    <div>
         <section>
             <form id="account" method="post">
                 <h2>Use a local account to log in.</h2>

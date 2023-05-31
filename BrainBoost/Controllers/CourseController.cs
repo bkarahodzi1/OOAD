@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BrainBoost.Controllers
 {
+    [Authorize]
     public class CourseController : Controller
     {
         private readonly ApplicationDbContext _context;
