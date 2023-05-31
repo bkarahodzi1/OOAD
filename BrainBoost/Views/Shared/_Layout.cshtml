@@ -10,6 +10,8 @@
     <title>@ViewData["Title"] - BrainBoost</title>
     <link rel="stylesheet" href="~/css/landing.css" />
     <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/css/register.css" />
+
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -95,7 +97,7 @@
     @if (User.IsInRole("Professor"))
         {
         <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <a class="nav-link" asp-area="" asp-controller="Course" asp-action="Create">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Kreiraj kurs</span>
             </a>
@@ -154,7 +156,7 @@
             <div id="content">
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid grid-container">
+                <div class="container-fluid">
                     @RenderBody()
 
                 </div>

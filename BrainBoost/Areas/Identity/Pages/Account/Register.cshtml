@@ -36,65 +36,67 @@
         background-color: #d32f2f; /* Darker shade of red on hover */
     }
 </style>
-
-<div class="form-container">
-    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-        <div>
-            <!-- First set of fields -->
-            <h2>@ViewData["Title"]</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <label asp-for="Input.Username"></label>
-                <input asp-for="Input.Username" class="form-control" autocomplete="off" aria-required="true" />
-                <span asp-validation-for="Input.Username" class="text-danger"></span>
+<div class="container-fluid flex-display">
+    <div class="form-container form-expand">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div>
+                <!-- First set of fields -->
+                <h2>@ViewData["Title"]</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <label asp-for="Input.Username"></label>
+                    <input asp-for="Input.Username" class="form-control" autocomplete="off" aria-required="true" />
+                    <span asp-validation-for="Input.Username" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="off" aria-required="true" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" autocomplete="off" aria-required="true" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <label asp-for="Input.ConfirmPassword"></label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="off" aria-required="true" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div><br />
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
             </div>
-            <div class="form-floating">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" autocomplete="off" aria-required="true" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div class="break"></div> <!-- Break element -->
+            <div>
+                <!-- Second set of fields -->
+                <h2>Personal information</h2>
+                <hr />
+                <div class="form-floating">
+                    <label asp-for="Input.FirstName"></label>
+                    <input asp-for="Input.FirstName" class="form-control" autocomplete="off" aria-required="true" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <label asp-for="Input.LastName"></label>
+                    <input asp-for="Input.LastName" class="form-control" autocomplete="off" aria-required="true" />
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+                <label asp-for="Input.BirthDate"></label><br />
+                <input type="date" asp-for="Input.BirthDate" />
+                <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+                <div class="form-floating">
+                    <label asp-for="Input.Role"></label>
+                </div>
+                <select id="role" name="role" class="form-control">
+                    <option value="Student">Student</option>
+                    <option value="Professor">Professor</option>
+                </select><br />
+                <button class="cancel-button" onclick="window.location='https://localhost:44324/';return false;">Cancel</button>
             </div>
-            <div class="form-floating">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" autocomplete="off" aria-required="true" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="off" aria-required="true" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div><br />
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </div>
-        <div class="break"></div> <!-- Break element -->
-        <div>
-            <!-- Second set of fields -->
-            <h2>Personal information</h2>
-            <hr />
-            <div class="form-floating">
-                <label asp-for="Input.FirstName"></label>
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="off" aria-required="true" />
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <label asp-for="Input.LastName"></label>
-                <input asp-for="Input.LastName" class="form-control" autocomplete="off" aria-required="true" />
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <label asp-for="Input.BirthDate"></label><br />
-            <input type="date" asp-for="Input.BirthDate" />
-            <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
-            <div class="form-floating">
-                <label asp-for="Input.Role"></label>
-            </div>
-            <select id="role" name="role" class="form-control">
-                <option value="Student">Student</option>
-                <option value="Professor">Professor</option>
-            </select><br/>
-            <button class="cancel-button" onclick="window.location='https://localhost:44324/';return false;">Cancel</button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
+
 
 
 @section Scripts {

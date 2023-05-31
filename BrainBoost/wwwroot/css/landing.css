@@ -20,6 +20,13 @@ body {
     grid-gap: 50px
 }
 
+.flex-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 120px);
+}
+
 p {
     font-family: Ubuntu;
     font-size: 20px;
