@@ -11,10 +11,6 @@
     <link rel="stylesheet" href="~/css/landing.css" />
     <link rel="stylesheet" href="~/css/main.css" />
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <!-- <link rel="stylesheet" href="~/css/site.css" />
-
-    -->
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -67,86 +63,88 @@
         {<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
 
-                <!-- Nav Item - Početna -->
-                <li class="nav-item active">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Početna</span>
-                    </a>
-                </li>
+    <!-- Nav Item - Početna -->
+    <li class="nav-item active">
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Početna</span>
+        </a>
+    </li>
 
-                <!-- Nav Item - Moji kursevi -->
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Moji kursevi</span>
-                    </a>
-                </li>
+    <!-- Nav Item - Moji kursevi -->
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Moji kursevi</span>
+        </a>
+    </li>
 
-                <!-- Nav Item - Pretraga kurseva -->
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Pretraga kurseva</span>
-                    </a>
-                </li>
-
-
-                <!-- Nav Item - Kreiraj kurs -->
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Kreiraj kurs</span>
-                    </a>
-                </li>
+    <!-- Nav Item - Pretraga kurseva -->
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Pretraga kurseva</span>
+        </a>
+    </li>
 
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
+    <!-- Nav Item - Kreiraj kurs -->
+    @if (User.IsInRole("Professor"))
+        {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Kreiraj kurs</span>
+            </a>
+        </li>
+        }
 
-                <!-- Nav Item - Kvizovi -->
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Kvizovi</span>
-                    </a>
-                </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
-                <!-- Nav Item - Statistika -->
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Statistika</span>
-                    </a>
-                </li>
+    <!-- Nav Item - Kvizovi -->
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Kvizovi</span>
+        </a>
+    </li>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
+    <!-- Nav Item - Statistika -->
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Statistika</span>
+        </a>
+    </li>
 
-                <!-- Nav Item - Profil -->
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Profil</span>
-                    </a>
-                </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
-                <!-- Nav Item - Postavke -->
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Postavke</span>
-                    </a>
-                </li>
+    <!-- Nav Item - Profil -->
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Profil</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Postavke -->
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Postavke</span>
+        </a>
+    </li>
 
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
-            </ul>
+</ul>
             <!-- End of Sidebar -->
         }
         <!-- Content Wrapper -->
@@ -156,7 +154,7 @@
             <div id="content">
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid  grid-container">
+                <div class="container-fluid grid-container">
                     @RenderBody()
 
                 </div>
