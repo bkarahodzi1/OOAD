@@ -25,14 +25,12 @@ namespace BrainBoost.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private ApplicationDbContext context;
-        //private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender/*,
-            RoleManager<IdentityRole> roleManager*/,
+            IEmailSender emailSender,
             ApplicationDbContext c)
         {
             _userManager = userManager;
@@ -40,7 +38,6 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             context = c;
-            //_roleManager = roleManager;
         }
 
         [BindProperty]
@@ -132,14 +129,9 @@ namespace BrainBoost.Areas.Identity.Pages.Account
                     context.SaveChanges();
 
                     var rola = await _userManager.FindByNameAsync(Input.Username);
-                    if (rola == null)
-                    {
-                        //Error handler
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(rola, combo);
-                    }
+                    await _userManager.AddToRoleAsync(rola, combo);
+
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
