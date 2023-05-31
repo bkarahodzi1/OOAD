@@ -67,3 +67,6 @@ h1 {
     padding: 70px;
 }
 
+.nav-link span {
+    font-size: 18px !important
+}
