@@ -29,12 +29,13 @@
         border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.3s;
-        margin-top: 9px;
+        /*margin-top: 9px;*/
     }
 
     .cancel-button:hover {
         background-color: #d32f2f; /* Darker shade of red on hover */
     }
+
 </style>
 <div class="container-fluid flex-display">
     <div class="form-container form-expand">
@@ -64,7 +65,7 @@
                     <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="off" aria-required="true" />
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div><br />
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mt-1">Register</button>
             </div>
             <div class="break"></div> <!-- Break element -->
             <div>
@@ -81,9 +82,11 @@
                     <input asp-for="Input.LastName" class="form-control" autocomplete="off" aria-required="true" />
                     <span asp-validation-for="Input.LastName" class="text-danger"></span>
                 </div>
+                <div class ="col-form-label">
                 <label asp-for="Input.BirthDate"></label><br />
                 <input type="date" asp-for="Input.BirthDate" />
                 <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+                </div>
                 <div class="form-floating">
                     <label asp-for="Input.Role"></label>
                 </div>
