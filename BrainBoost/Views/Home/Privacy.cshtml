@@ -1,6 +1,93 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<style>
+    p{
+        font-family: Ubuntu;
+        font-size: 20px;
+        color: rgb(49, 54, 56);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    ul{
+        font-family: Ubuntu;
+        font-size: 20px;
+        color: rgb(49, 54, 56);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    a:link {
+        font-family: Ubuntu;
+        font-size: 20px;
+        color: rgb(49, 54, 56);
+        margin: 0
+    }
+
+    h1 {
+        font-family: Ubuntu;
+    }
+
+    h2{
+        margin-top:15px;
+    }
+
+    .header {
+        height: 60px;
+    }
+
+    .footer {
+        background-color: white;
+        height: 60px;
+    }
+</style>
+
+
+
+<div class="row">
+<div class="col-md-5">
+    <h1>@ViewData["Title"]</h1>
+        <hr>
+        <h2>Information We Collect</h2>
+        <p>We collect the following types of information:</p>
+        <ul>
+            <li>Personal information such as name, email, and address</li>
+            <li>Demographic information such as age and gender</li>
+            <li>Log files that track actions on the website</li>
+            <li>Cookies and similar technologies</li>
+        </ul>
+
+        <h2>How We Use Your Information</h2>
+        <p>We use your information for the following purposes:</p>
+        <ul>
+            <li>To provide and maintain our services</li>
+            <li>To improve our services and website</li>
+            <li>To personalize your experience</li>
+            <li>To communicate with you</li>
+        </ul>
+
+        <h2>Information Sharing and Disclosure</h2>
+        <p>We may share your information with:</p>
+        <ul>
+            <li>Third-party service providers</li>
+            <li>Law enforcement agencies</li>
+            <li>Other parties with your consent</li>
+        </ul>
+
+        <h2>Data Security</h2>
+        <p>We take reasonable measures to protect your information.</p>
+
+        <h2>Changes to This Privacy Policy</h2>
+        <p>We may update our Privacy Policy from time to time.</p>
+
+        <h2>Contact Us</h2>
+        <p>If you have any questions about our Privacy Policy, please contact us.</p>
+</div>
+<div class="col-md-7">
+        <div style="margin-top:100px;">
+            <img src="/image/pp1.png" alt="Privacy Policy Image" class="img-fluid" />
+        </div>
+</div>
+</div>
