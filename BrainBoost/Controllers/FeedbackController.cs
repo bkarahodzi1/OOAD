@@ -58,9 +58,11 @@ namespace BrainBoost.Controllers
         {
             if (ModelState.IsValid)
             {
+                feedback.CreatedAt = DateTime.Now;
                 _context.Add(feedback);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["SuccessMessage"] = "Vaš feedback je uspješno poslan!";
+                return RedirectToAction("Index", "Home");
             }
             return View(feedback);
         }
@@ -164,7 +166,15 @@ namespace BrainBoost.Controllers
             return View();
         }
 
-        // TODO: POST: Feedback/FeedbackRate
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FeedbackRate(int rate)
+        {
+            var feedback = Feedback.CreateFromRate(rate);
+            _context.Add(feedback);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
 
         ///GET: Professor/FeedbackComment
@@ -173,6 +183,15 @@ namespace BrainBoost.Controllers
             return View();
         }
 
-        // TODO: POST: Feedback/FeedbackComment
+        // POST: Feedback/FeedbackComment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FeedbackComment(string comment)
+        {
+            var feedback = Feedback.CreateFromComment(comment);
+            _context.Add(feedback);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

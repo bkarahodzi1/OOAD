@@ -13,5 +13,22 @@ namespace BrainBoost.Models
         public DateTime CreatedAt { get; set; }
 
         public Feedback () { }
+        public static Feedback CreateFromRate(int rate)
+        {
+            return new Feedback
+            {
+                Rate = rate,
+                CreatedAt = DateTime.Now
+            };
+        }
+
+        public static Feedback CreateFromComment(string comment)
+        {
+            return new Feedback
+            {
+                Comment = comment,
+                CreatedAt = DateTime.Now
+            };
+        }
     }
 }
