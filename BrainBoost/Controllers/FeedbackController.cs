@@ -176,7 +176,6 @@ namespace BrainBoost.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         ///GET: Professor/FeedbackComment
         public IActionResult FeedbackComment()
         {
