@@ -196,5 +196,23 @@ namespace BrainBoost.Controllers
         {
             return View();
         }
+
+        public IActionResult RefundConfirmation()
+        {
+            return View();
+        }
+
+        public IActionResult RefundForm()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitRefundRequest(string reason)
+        {
+            TempData["SuccessMessage"] = "Vaš zahtjev za refund je uspješno poslan!";
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
