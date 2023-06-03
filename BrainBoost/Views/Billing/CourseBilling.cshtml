@@ -1,8 +1,71 @@
-﻿@{
+﻿@model BrainBoost.Models.BillingCard
+@using System.Globalization
+@{
     ViewData["Title"] = "Course Billing";
 }
 
+
 <div class="text-center">
     <h1 class="display-4">Course Billing</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>Are you sure you want to pay for course (course name)?</p>
 </div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+           
+            <div class="form-group">
+                    <label asp-for="ExpiryMonth" class="control-label"></label>
+                    <select asp-for="ExpiryMonth" class="form-control" required>
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i);
+                        <option value="@i.ToString("D2")">@monthName</option>
+                    }
+				</select>
+                <span asp-validation-for="ExpiryMonth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <label asp-for="ExpiryYear" class="control-label"></label>
+                    <select asp-for="ExpiryYear" class="form-control" required>
+                    @for (int i = DateTime.Now.Year; i <= DateTime.Now.Year + 10; i++)
+                    {
+                        <option value="@i.ToString()">@i.ToString()</option>
+                    }
+                    </select>
+                <span asp-validation-for="ExpiryYear" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CVV" class="control-label"></label>
+                <input asp-for="CVV" class="form-control" required />
+                <span asp-validation-for="CVV" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="CardNumber" class="control-label"></label>
+                <input asp-for="CardNumber" class="form-control" required />
+                <span asp-validation-for="CardNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Amount to be Paid:</label>
+                <label id="amountLabel" class="form-control-label">-- KM</label>
+            </div>
+
+        </form>
+        <a asp-controller="Course" asp-action="CourseContent" class="btn btn-primary" style="float:right;">Pay</a>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
