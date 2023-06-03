@@ -2,7 +2,13 @@
     ViewData["Title"] = "Feedback Comment";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Feedback Comment</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="FeedbackComment" method="post">
+    <div class="form-group">
+        <label for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    @Html.AntiForgeryToken()
+</form>
