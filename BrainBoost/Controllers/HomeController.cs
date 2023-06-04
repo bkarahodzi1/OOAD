@@ -14,15 +14,14 @@ namespace BrainBoost.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IEmailSender _emailSender;
+        public HomeController(IEmailSender emailSender)
         {
-            _logger = logger;
+            _emailSender = emailSender;
         }
 
         //Landing page
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             bool isAuthenticated = User.Identity.IsAuthenticated;
             System.Diagnostics.Debug.WriteLine(isAuthenticated);

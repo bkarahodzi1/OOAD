@@ -33,7 +33,7 @@ namespace BrainBoost
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => {
-                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedAccount = true;
                 options.Password = new PasswordOptions
                 {
                     RequireDigit = true,
@@ -45,6 +45,7 @@ namespace BrainBoost
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddControllersWithViews();
         }
 

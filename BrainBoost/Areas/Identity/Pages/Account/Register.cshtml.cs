@@ -91,6 +91,12 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
+        private int generateCode()
+        {
+            Random random = new Random();
+            return random.Next(100000, 999999);
+        }
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/Home/HomeCourses");
@@ -134,26 +140,13 @@ namespace BrainBoost.Areas.Identity.Pages.Account
 
                     _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    int code = generateCode();
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    string body = "Dear User,<br/><br/>Thank you for registering on our platform. To complete the registration process, we kindly ask you to confirm your email address.<br/><br/>Your verification code is: " + code + "<br/><br/>If you did not initiate this registration, please disregard this message.<br/><br/>Thank you for your cooperation.<br/><br/>Best regards,<br/>Your Support Team";
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirm Your Email Adress", body);
+
+                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, code = code , returnUrl = returnUrl }) ;
                 }
                 foreach (var error in result.Errors)
                 {

@@ -15,7 +15,10 @@
         margin-top: 20px; /* Adjust the margin as desired */
     }
 
-    .cancel-button {
+    a.button {
+        -webkit-appearance: button;
+        -moz-appearance: button;
+        appearance: button;
         display: inline-block;
         width: 100%;
         padding: 10px 20px;
@@ -29,11 +32,10 @@
         border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.3s;
-        /*margin-top: 9px;*/
     }
 
-    .cancel-button:hover {
-        background-color: #d32f2f; /* Darker shade of red on hover */
+    a.button:hover {
+        background-color: #d32f2f;
     }
 
 </style>
@@ -94,7 +96,7 @@
                     <option value="Student">Student</option>
                     <option value="Professor">Professor</option>
                 </select><br />
-                <button class="cancel-button" onclick="window.location='https://localhost:44324/';return false;">Cancel</button>
+                <a href="/" class="button">Cancel</a>
             </div>
         </form>
     </div>
