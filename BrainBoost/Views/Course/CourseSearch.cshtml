@@ -1,8 +1,73 @@
-﻿@{
-    ViewData["Title"] = "Course Search";
-}
+﻿@model IEnumerable<BrainBoost.Models.Course>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .search-container {
+            margin-bottom: 10px;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Course Search</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        .input-group {
+            width: 100%;
+        }
+
+        .form-control {
+            width: calc(100% - 90px); /* Adjust the width as per your needs */
+            flex-grow: 1;
+        }
+
+        .btn-primary {
+            flex-shrink: 0;
+        }
+
+        .clickable-row {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Course search</h1>
+    <!-- Search field and button -->
+    <div class="search-container">
+        <form asp-controller="Course" asp-action="Search" method="get">
+            <div class="input-group">
+                <input type="text" id="searchInput" name="searchString" placeholder="Search for a course..." class="form-control">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Table displaying active courses -->
+    <div id="courses">
+        <table class="table table-striped table-bordered">
+            <colgroup>
+                <col style="width: 40%">
+                <col style="width: 20%">
+                <col style="width: 20%">
+            </colgroup>
+            <thead class="thead-dark">
+                <tr>
+                    <th>Course Name</th>
+                    <th>Professor</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="clickable-row" onclick="location.href='@Url.Action("Details", "Course", new { id = item.CourseId })'">
+                        <td>@Html.DisplayFor(modelItem => item.CourseName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Professor.FirstName) @Html.DisplayFor(modelItem => item.Professor.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</body>
+</html>

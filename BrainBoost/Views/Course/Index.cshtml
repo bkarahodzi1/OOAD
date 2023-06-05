@@ -1,13 +1,12 @@
 @model IEnumerable<BrainBoost.Models.Course>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Moji kursevi";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
     <a asp-controller="Course" asp-action="RefundConfirmation" class="btn btn-primary" style="float:right;">Refund</a>
 </p>
 <table class="table">
@@ -47,7 +46,8 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Professor.UserId)
+                @Html.DisplayFor(modelItem => item.Professor.FirstName)
+                @Html.DisplayFor(modelItem => item.Professor.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CourseName)

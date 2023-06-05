@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BrainBoost.Controllers
 {
@@ -15,10 +16,12 @@ namespace BrainBoost.Controllers
     public class CourseController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CourseController(ApplicationDbContext context)
+        public CourseController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Course
@@ -186,10 +189,6 @@ namespace BrainBoost.Controllers
         }
 
         ///GET: Course/CourseSearch
-        public IActionResult CourseSearch()
-        {
-            return View();
-        }
 
         ///GET: Course/CourseStatistics
         public IActionResult CourseStatistics()
@@ -214,5 +213,66 @@ namespace BrainBoost.Controllers
             TempData["SuccessMessage"] = "Vaš zahtjev za refund je uspješno poslan!";
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult MyCourses()
+        {
+            var courses = _context.CourseProgress
+                .Include(c => c.Course)
+                .ThenInclude(s => s.Professor)
+                .Include(c => c.Student)
+                .Where(c => c.Student.Username.Equals(User.Identity.Name))
+                .ToList();
+            return View(courses);
+        }
+        public IActionResult CourseSearch()
+        {
+            var courses = _context.Course.Include(c => c.Professor).ToList();
+            return View(courses);
+        }
+        public IActionResult Search(string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                var courses = _context.Course.Include(c => c.Professor).ToList();
+                return View("CourseSearch", courses);
+            }
+
+            var filteredCourses = _context.Course.Include(c => c.Professor)
+                                                .Where(c => c.CourseName.Contains(searchString))
+                                                .ToList();
+
+            return View("CourseSearch", filteredCourses);
+        }
+        public async Task<IActionResult> DetailsForMyCourses(int? id)
+        {
+            if (id == null || _context.Course == null)
+            {
+                return NotFound();
+            }
+
+            var course = await _context.Course
+                .Include(c => c.Professor)
+                .FirstOrDefaultAsync(m => m.CourseId == id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            // Find the CourseProgress entity
+            var courseProgress = await _context.CourseProgress
+                .FirstOrDefaultAsync(cp => cp.CourseId == id);
+
+            if (courseProgress != null)
+            {
+                // Update the LastAccess property
+                courseProgress.LastAccess = DateTime.Now;
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = course.CourseId });
+        }
+
     }
 }
