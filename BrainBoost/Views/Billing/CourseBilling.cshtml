@@ -1,19 +1,24 @@
 ﻿@model BrainBoost.Models.BillingCard
+
 @using System.Globalization
 @{
     ViewData["Title"] = "Course Billing";
+    var course = ViewBag.course;
+    string priceText = course.Price != null ? $"{course.Price} KM" : "Free";
+
 }
 
 
 <div class="text-center">
     <h1 class="display-4">Course Billing</h1>
-    <p>Are you sure you want to pay for course (course name)?</p>
+    <p>Are you sure you want to pay for course @course.CourseName ?</p>
 </div>
 
 <div class="row justify-content-center mt-4">
     <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
 
            
             <div class="form-group">
@@ -53,7 +58,7 @@
 
             <div class="form-group">
                 <label class="control-label">Amount to be Paid:</label>
-                <label id="amountLabel" class="form-control-label">-- KM</label>
+                <label id="amountLabel" class="form-control-label">@priceText</label>
             </div>
 
         </form>

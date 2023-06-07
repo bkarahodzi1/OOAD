@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
+using SQLitePCL;
 
 namespace BrainBoost.Controllers
 {
@@ -19,11 +20,23 @@ namespace BrainBoost.Controllers
             _context = context;
         }
 
+       
+
+        ///GET: Billing/CourseBilling
+        public async Task<IActionResult> CourseBilling(int id)
+        {
+            ViewData["id"] = id;
+            ViewBag.course=_context.Course.FirstOrDefault(c=>c.CourseId==id);
+
+         return View();
+        }
+
         // GET: Billing
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Billing.Include(b => b.BillingCard).Include(b => b.Course);
             return View(await applicationDbContext.ToListAsync());
+           
         }
 
         // GET: Billing/Details/5
@@ -172,11 +185,6 @@ namespace BrainBoost.Controllers
         }
 
 
-        ///GET: Billing/CourseBilling
-        public IActionResult CourseBilling()
-        {
-            return View();
-        }
 
         // TODO: POST: Billing/CourseBilling
 
