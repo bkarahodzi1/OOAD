@@ -103,54 +103,63 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Username, Email = Input.Email };
-                var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
+                var imaUBazi = await _userManager.FindByEmailAsync(Input.Email);
+                if(imaUBazi == null)
                 {
-                    string combo = Request.Form["role"].ToString();
-                    if (combo == "Student")
+                    var user = new IdentityUser { UserName = Input.Username, Email = Input.Email };
+                    var result = await _userManager.CreateAsync(user, Input.Password);
+                    if (result.Succeeded)
                     {
-                        Models.User u = new Models.Student();
-                        u.FirstName = Input.FirstName;
-                        u.LastName = Input.LastName;
-                        u.Email = Input.Email;
-                        u.BirthDate = Input.BirthDate;
-                        u.CreatedAt = DateTime.Now;
-                        u.IsVerified = true;
-                        u.Username = Input.Username;
-                        context.User.Add(u);
+                        string combo = Request.Form["role"].ToString();
+                        if (combo == "Student")
+                        {
+                            Models.User u = new Models.Student();
+                            u.FirstName = Input.FirstName;
+                            u.LastName = Input.LastName;
+                            u.Email = Input.Email;
+                            u.BirthDate = Input.BirthDate;
+                            u.CreatedAt = DateTime.Now;
+                            u.IsVerified = true;
+                            u.Username = Input.Username;
+                            context.User.Add(u);
+                        }
+                        else
+                        {
+                            Models.User u = new Models.Professor();
+                            u.FirstName = Input.FirstName;
+                            u.LastName = Input.LastName;
+                            u.Email = Input.Email;
+                            u.BirthDate = Input.BirthDate;
+                            u.CreatedAt = DateTime.Now;
+                            u.IsVerified = true;
+                            u.Username = Input.Username;
+                            context.User.Add(u);
+                        }
+                        context.SaveChanges();
+
+                        var rola = await _userManager.FindByNameAsync(Input.Username);
+                        await _userManager.AddToRoleAsync(rola, combo);
+
+
+                        _logger.LogInformation("User created a new account with password.");
+
+                        int code = generateCode();
+
+                        string body = "Dear User,<br/><br/>Thank you for registering on our platform. To complete the registration process, we kindly ask you to confirm your email address.<br/><br/>Your verification code is: " + code + "<br/><br/>If you did not initiate this registration, please disregard this message.<br/><br/>Thank you for your cooperation.<br/><br/>Best regards,<br/>Your Support Team";
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm Your Email Adress", body);
+
+                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, code = code, returnUrl = returnUrl });
                     }
-                    else
+
+                    foreach (var error in result.Errors)
                     {
-                        Models.User u = new Models.Professor();
-                        u.FirstName = Input.FirstName;
-                        u.LastName = Input.LastName;
-                        u.Email = Input.Email;
-                        u.BirthDate = Input.BirthDate;
-                        u.CreatedAt = DateTime.Now;
-                        u.IsVerified = true;
-                        u.Username = Input.Username;
-                        context.User.Add(u);
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
-                    context.SaveChanges();
-
-                    var rola = await _userManager.FindByNameAsync(Input.Username);
-                    await _userManager.AddToRoleAsync(rola, combo);
-
-
-                    _logger.LogInformation("User created a new account with password.");
-
-                    int code = generateCode();
-
-                    string body = "Dear User,<br/><br/>Thank you for registering on our platform. To complete the registration process, we kindly ask you to confirm your email address.<br/><br/>Your verification code is: " + code + "<br/><br/>If you did not initiate this registration, please disregard this message.<br/><br/>Thank you for your cooperation.<br/><br/>Best regards,<br/>Your Support Team";
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm Your Email Adress", body);
-
-                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, code = code , returnUrl = returnUrl }) ;
                 }
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    TempData["EmailPostoji"] = "This email has already been taken.";
                 }
             }
 
