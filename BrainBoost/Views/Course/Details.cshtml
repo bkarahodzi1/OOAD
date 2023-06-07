@@ -67,7 +67,7 @@
         </dd>
 
     </dl>
-
+    @if(!User.IsInRole("Professor")){
     <a asp-controller="Billing" asp-action="CourseBilling" asp-route-id=@Model.CourseId class="btn btn-primary">Enroll me</a>
-
+    }
 </div>

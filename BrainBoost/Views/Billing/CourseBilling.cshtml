@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Course Billing";
     var course = ViewBag.course;
-    string priceText = course.Price != null ? $"{course.Price} KM" : "Free";
+    string priceText = course.Price != null ? $"{course.Price} {course.Currency}" : "Free";
 
 }
 
