@@ -71,7 +71,7 @@
     <li class="nav-item @Html.ActiveClass("Home", "Index")">
         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Početna</span>
+            <span>Home</span>
         </a>
     </li>
 
@@ -79,7 +79,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Course" asp-action="MyCourses">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Moji kursevi</span>
+            <span>My courses</span>
         </a>
     </li>
 
@@ -87,7 +87,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Course" asp-action="CourseSearch">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Pretraga kurseva</span>
+            <span>Search courses</span>
         </a>
     </li>
 
@@ -98,7 +98,7 @@
         <li class="nav-item @Html.ActiveClass("Course", "Create")">
             <a class="nav-link" asp-area="" asp-controller="Course" asp-action="Create">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Kreiraj kurs</span>
+                <span>Create course</span>
             </a>
         </li>
         }
@@ -110,7 +110,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Kvizovi</span>
+            <span>Quizzes</span>
         </a>
     </li>
 
@@ -118,7 +118,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Statistika</span>
+            <span>Statistics</span>
         </a>
     </li>
 
@@ -129,7 +129,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Profil</span>
+            <span>Profile</span>
         </a>
     </li>
 
@@ -137,12 +137,12 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Postavke</span>
+            <span>Settings</span>
         </a>
     </li>
 
     <!-- Nav Item - Feedback -->
-    <li class="nav-item">
+    <li class="nav-item @Html.ActiveClass("Feedback", "FeedbackRate") @Html.ActiveClass("Feedback", "FeedbackSuccess")">
         <a class="nav-link" asp-area="" asp-controller="Feedback" asp-action="FeedbackRate">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Feedback</span>

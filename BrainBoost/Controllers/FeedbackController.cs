@@ -49,6 +49,12 @@ namespace BrainBoost.Controllers
             return View();
         }
 
+        // GET: Feedback/FeedbackSuccess
+        public IActionResult FeedbackSuccess()
+        {
+            return View();
+        }
+
         // POST: Feedback/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -61,8 +67,8 @@ namespace BrainBoost.Controllers
                 feedback.CreatedAt = DateTime.Now;
                 _context.Add(feedback);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Vaš feedback je uspješno poslan!";
-                return RedirectToAction("Index", "Home");
+                TempData["SuccessMessage"] = "Thank you, your feedback has been received!";
+                return RedirectToAction("FeedbackSuccess", "Feedback");
             }
             return View(feedback);
         }

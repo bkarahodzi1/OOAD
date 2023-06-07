@@ -6,13 +6,13 @@
 
 <form asp-action="Create" method="post">
     <div class="form-group">
-        <label for="rate">Ocjena:</label>
+        <label for="rate">Rate:</label>
         <input type="number" class="form-control" id="rate" name="Rate" min="1" max="5" required>
     </div>
     <div class="form-group">
-        <label for="comment">Komentar:</label>
+        <label for="comment">Comment:</label>
         <textarea class="form-control" id="comment" name="Comment" rows="3" required></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Potvrdi</button>
+    <button type="submit" class="btn btn-primary">Save</button>
     @Html.AntiForgeryToken()
 </form>
