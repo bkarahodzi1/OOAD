@@ -40,18 +40,18 @@
         margin: 10px auto; /* Center the error message horizontally */
     }
 </style>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="container-fluid flex-display" >
+    <div class="row">
+        <div class="">
             <h2>@ViewData["Title"]</h2>
             <hr />
             <p>Please enter the verification code sent to your email.</p>
             <form id="verificationForm" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.VerificationCode"></label>
-                <input asp-for="Input.VerificationCode" class="form-control" autocomplete="off" aria-required="true" />
-                <span asp-validation-for="Input.VerificationCode" class="text-danger"></span>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.VerificationCode"></label>
+                    <input asp-for="Input.VerificationCode" class="form-control w-100" autocomplete="off" aria-required="true" />
+                    <span asp-validation-for="Input.VerificationCode" class="text-danger"></span>
                     @if (TempData["ErrorMessage"] != null)
                     {
                         <br />
@@ -59,14 +59,14 @@
                             <strong>Error:</strong> @TempData["ErrorMessage"]
                         </div>
                     }
-                
-            </div>
-            <button id="verifySubmit" type="submit" class="w-100 btn btn-lg btn-primary">Verify</button>
-            </form>
-    </div>
 
-    
+                </div>
+                <button id="verifySubmit" type="submit" class="w-100 btn btn-lg btn-primary">Verify</button>
+            </form>
+        </div>
+    </div>
 </div>
+
 
 
 
