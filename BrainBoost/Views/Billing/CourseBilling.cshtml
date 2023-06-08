@@ -16,7 +16,7 @@
 
 <div class="row justify-content-center mt-4">
     <div class="col-md-6">
-        <form asp-action="Create">
+        <form asp-action="Create" asp-route-courseid=@course.CourseId>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
@@ -60,10 +60,11 @@
                 <label class="control-label">Amount to be Paid:</label>
                 <label id="amountLabel" class="form-control-label">@priceText</label>
             </div>
+			<button type="submit" class="btn btn-primary" style="float:right;">Pay</button>
 
-        </form>
-        <a asp-controller="Billing" asp-action="Create" asp-route-courseid=@course.CourseId class="btn btn-primary" style="float:right;">Pay</a>
-
+		</form><!--asp-route-courseid=@course.CourseId -->
+       
+        
     </div>
 
 </div>

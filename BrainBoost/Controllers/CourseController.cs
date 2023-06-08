@@ -47,6 +47,24 @@ namespace BrainBoost.Controllers
             {
                 return NotFound();
             }
+            if (User.IsInRole("Student")) { 
+            var username = User.Identity.Name;
+            Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
+                Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId);
+                if(billing!=null && billing.CourseId==id&& billing.IsPurchaseSuccessful)
+                {
+                    ViewData["isPaid"] = "true";
+                    ViewData["Controller"] = "Course";
+                    ViewData["Action"] = "Details";
+                    return View(course);
+                }
+            }
+            
+
+
+            ViewData["controller"] = "Billing";
+            ViewData["action"] = "CourseBilling";
+
 
             return View(course);
         }
@@ -63,6 +81,7 @@ namespace BrainBoost.Controllers
             return View();
         }
 
+
         // POST: Course/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -71,25 +90,29 @@ namespace BrainBoost.Controllers
         public async Task<IActionResult> Create([Bind("CourseName,Description,Price,Currency")] Course course)
         {
             if (ModelState.IsValid)
-                
-            {var username=User.Identity.Name;
 
-                try{
+            {
+                var username = User.Identity.Name;
+
+                try
+                {
                     Professor professor = await _context.Professor.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
-course.CreatedAt = DateTime.Now;
-                course.UpdatedAt = DateTime.Now;
-                course.Professor = professor;
-                course.ProfessorId = professor.UserId;
-                _context.Add(course);
-                await _context.SaveChangesAsync();
+                    course.CreatedAt = DateTime.Now;
+                    course.UpdatedAt = DateTime.Now;
+                    course.Professor = professor;
+                    course.ProfessorId = professor.UserId;
+                    _context.Add(course);
+                    await _context.SaveChangesAsync();
                 }
-                catch{; }
-                    
-                
+                catch {; }
+
+            ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId", course.ProfessorId);
+
                 return RedirectToAction(nameof(Details), new { id = course.CourseId });
             }
-            ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId", course.ProfessorId);
-            return View(course);
+            else { return View(); }
+           
+            return View();
         }
 
         // GET: Course/Edit/5
