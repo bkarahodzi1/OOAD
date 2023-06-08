@@ -15,12 +15,10 @@ namespace BrainBoost.Controllers
     public class CourseProgressController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> userManager;
 
-        public CourseProgressController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public CourseProgressController(ApplicationDbContext context)
         {
             _context = context;
-            this.userManager = userManager;
         }
 
         // GET: CourseProgress
