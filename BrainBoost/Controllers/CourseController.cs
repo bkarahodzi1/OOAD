@@ -9,6 +9,7 @@ using BrainBoost.Data;
 using BrainBoost.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace BrainBoost.Controllers
 {
@@ -53,7 +54,12 @@ namespace BrainBoost.Controllers
         // GET: Course/Create
         public IActionResult Create()
         {
-            ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId");
+            string username = User.Identity.Name;
+            List<string> currencies = new List<string>
+            {
+                "USD", "EUR", "GBP", "KM"
+            };
+            ViewBag.Currencies = new SelectList(currencies);
             return View();
         }
 
@@ -62,13 +68,25 @@ namespace BrainBoost.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseId,ProfessorId,CourseName,Description,Price,Currency,CompletedCount,CompletedPercentage,CreatedAt,UpdatedAt")] Course course)
+        public async Task<IActionResult> Create([Bind("CourseName,Description,Price,Currency")] Course course)
         {
             if (ModelState.IsValid)
-            {
+                
+            {var username=User.Identity.Name;
+
+                try{
+                    Professor professor = await _context.Professor.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
+course.CreatedAt = DateTime.Now;
+                course.UpdatedAt = DateTime.Now;
+                course.Professor = professor;
+                course.ProfessorId = professor.UserId;
                 _context.Add(course);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                }
+                catch{; }
+                    
+                
+                return RedirectToAction(nameof(Details), new { id = course.CourseId });
             }
             ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId", course.ProfessorId);
             return View(course);

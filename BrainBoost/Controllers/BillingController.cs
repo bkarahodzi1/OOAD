@@ -60,10 +60,20 @@ namespace BrainBoost.Controllers
         }
 
         // GET: Billing/Create
-        public IActionResult Create(int courseid)
+        public  IActionResult Create(int courseid)
         {
             ViewData["BillingCardId"] = new SelectList(_context.BillingCard, "BillingCardId", "BillingCardId");
             ViewData["CourseId"] = new SelectList(_context.Course, "CourseId", "CourseId");
+            /*if (ModelState.IsValid)
+            {
+                Billing billing=new Billing();
+                BillingCard billingCard = await _context.BillingCard.FindAsync();
+
+                _context.Add(billing);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }*/
+
             return RedirectToAction("Details", "Course", new { id = courseid });
         }
 
