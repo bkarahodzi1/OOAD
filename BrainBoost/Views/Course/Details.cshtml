@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Details";
 
+    var controller = ViewData["Controller"];
+    var action = ViewData["Action"];
+    bool isPaid = ViewData["isPaid"]=="true" ? true : false;
+
 }
 
 <h1>Details</h1>
@@ -67,7 +71,7 @@
         </dd>
 
     </dl>
-    @if(!User.IsInRole("Professor")){
-    <a asp-controller="Billing" asp-action="CourseBilling" asp-route-id=@Model.CourseId class="btn btn-primary">Enroll me</a>
+    @if(!User.IsInRole("Professor")&&@Model.Price>0&& !(@isPaid)){
+    <a asp-controller=@controller asp-action=@action asp-route-id=@Model.CourseId class="btn btn-primary">Enroll me</a>
     }
 </div>
