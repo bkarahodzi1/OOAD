@@ -1,5 +1,4 @@
-@model IEnumerable<BrainBoost.Models.CourseProgress>
-
+﻿@model IEnumerable<BrainBoost.Models.Course>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,27 +12,15 @@
 }
 else
 {
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
 
-    <h2>Your enrolled courses</h2>
-    <p style="margin-bottom: 25px">Shows how much hours you have spent on each enrolled course.</p>
+    <h2>Your created courses</h2>
+    <p style="margin-bottom: 25px">Shows courses that you have created</p>
 
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Course)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastAccess)
-                </th>
-                <th>
-                    Percentage finished
-                </th>
-                <th>
-                    Hours viewed
+                    Course
                 </th>
                 <th></th>
             </tr>
@@ -43,39 +30,15 @@ else
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Course.CourseName)
-                    </td>
-                    @if (item.LastAccess == null)
-                    {
-                        <td>
-                            None
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastAccess)
-                        </td>
-                    }
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Progress)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Hours)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.CourseProgressId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.CourseProgressId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.CourseProgressId">Delete</a>
+                        @Html.DisplayFor(modelItem => item.CourseName)
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <h2>Courses by hours viewed</h2>
-    <p style="margin-bottom: 50px">Shows how much hours you have spent on each enrolled course.</p>
+    <h2>Students by hours viewed</h2>
+    <p style="margin-bottom: 50px">Shows chart of your students in each course</p>
 
     <div class="chart">
         <canvas id="doughnutchart"></canvas>
@@ -97,8 +60,8 @@ else
     {
         foreach(var item in Model)
         {
-            @:studentname.push('@item.Course.CourseName');
-            @:score.push(@item.Hours);
+            @:studentname.push('@item.CourseName');
+            @:score.push(@item.CompletedCount);
         }
     }
 

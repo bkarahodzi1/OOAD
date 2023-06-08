@@ -7,23 +7,44 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BrainBoost.Controllers
 {
     public class CourseProgressController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public CourseProgressController(ApplicationDbContext context)
+        public CourseProgressController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
         // GET: CourseProgress
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.CourseProgress.Include(c => c.Course).Include(c => c.Student);
-            return View(await applicationDbContext.ToListAsync());
+            //Ako je profesor dohvacamo kreirane kurseve za statistiku
+            if (User.IsInRole("Professor"))
+            {
+                var courses = await _context.Course
+                                              .Include(c => c.Professor)
+                                              .Where(c => c.Professor.Username.Equals(User.Identity.Name))
+                                              .ToListAsync();
+                return View("ProfessorStatistics", courses);
+            }
+            ///Ako je student dohvacamo enrollane kurseve za statistiku
+            else
+            {
+                var courseProgresses = await _context.CourseProgress
+                               .Include(c => c.Course)
+                               .Include(c => c.Student)
+                               .Where(c => c.Student.Username.Equals(User.Identity.Name))
+                               .ToListAsync();
+                return View(courseProgresses);
+            }
         }
 
         // GET: CourseProgress/Details/5

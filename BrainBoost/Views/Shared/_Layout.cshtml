@@ -68,7 +68,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Početna -->
-    <li class="nav-item @Html.ActiveClass("Home", "Index")">
+    <li class="nav-item @Html.ActiveClass("Home", "Index") @Html.ActiveClass("Home", "HomeCourses")">
         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Home</span>
@@ -76,7 +76,7 @@
     </li>
 
     <!-- Nav Item - Moji kursevi -->
-    <li class="nav-item">
+    <li class="nav-item @Html.ActiveClass("Course", "MyCourses")">
         <a class="nav-link" asp-area="" asp-controller="Course" asp-action="MyCourses">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>My courses</span>
@@ -84,7 +84,7 @@
     </li>
 
     <!-- Nav Item - Pretraga kurseva -->
-    <li class="nav-item">
+    <li class="nav-item @Html.ActiveClass("Course", "CourseSearch")">
         <a class="nav-link" asp-area="" asp-controller="Course" asp-action="CourseSearch">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Search courses</span>
