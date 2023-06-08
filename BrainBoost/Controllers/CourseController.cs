@@ -81,6 +81,7 @@ namespace BrainBoost.Controllers
             return View();
         }
 
+
         // POST: Course/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -89,25 +90,29 @@ namespace BrainBoost.Controllers
         public async Task<IActionResult> Create([Bind("CourseName,Description,Price,Currency")] Course course)
         {
             if (ModelState.IsValid)
-                
-            {   var username=User.Identity.Name;
 
-                try{
-                Professor professor = await _context.Professor.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
-                course.CreatedAt = DateTime.Now;
-                course.UpdatedAt = DateTime.Now;
-                course.Professor = professor;
-                course.ProfessorId = professor.UserId;
-                _context.Add(course);
-                await _context.SaveChangesAsync();
+            {
+                var username = User.Identity.Name;
+
+                try
+                {
+                    Professor professor = await _context.Professor.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
+                    course.CreatedAt = DateTime.Now;
+                    course.UpdatedAt = DateTime.Now;
+                    course.Professor = professor;
+                    course.ProfessorId = professor.UserId;
+                    _context.Add(course);
+                    await _context.SaveChangesAsync();
                 }
-                catch{; }
-                    
-                
+                catch {; }
+
+            ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId", course.ProfessorId);
+
                 return RedirectToAction(nameof(Details), new { id = course.CourseId });
             }
-            ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId", course.ProfessorId);
-            return View(course);
+            else { return View(); }
+           
+            return View();
         }
 
         // GET: Course/Edit/5
