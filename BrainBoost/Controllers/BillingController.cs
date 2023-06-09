@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
+using SQLitePCL;
 
 namespace BrainBoost.Controllers
 {
@@ -19,11 +20,23 @@ namespace BrainBoost.Controllers
             _context = context;
         }
 
+       
+
+        ///GET: Billing/CourseBilling
+        public async Task<IActionResult> CourseBilling(int id)
+        {
+            ViewData["id"] = id;
+            ViewBag.course=_context.Course.FirstOrDefault(c=>c.CourseId==id);
+
+         return View();
+        }
+
         // GET: Billing
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Billing.Include(b => b.BillingCard).Include(b => b.Course);
             return View(await applicationDbContext.ToListAsync());
+           
         }
 
         // GET: Billing/Details/5
@@ -47,11 +60,14 @@ namespace BrainBoost.Controllers
         }
 
         // GET: Billing/Create
-        public IActionResult Create()
+        public  IActionResult Create(int courseid)
         {
+            var username = User.Identity.Name;
             ViewData["BillingCardId"] = new SelectList(_context.BillingCard, "BillingCardId", "BillingCardId");
             ViewData["CourseId"] = new SelectList(_context.Course, "CourseId", "CourseId");
-            return View();
+            
+
+            return RedirectToAction("Details", "Course", new { id = courseid });
         }
 
         // POST: Billing/Create
@@ -59,17 +75,58 @@ namespace BrainBoost.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BillingId,BillingCardId,CourseId,CreatedAt,IsPurchaseSuccessful")] Billing billing)
-        {
-            if (ModelState.IsValid)
+        public async Task<IActionResult> Create(string cardNumber, int courseid, int cvv)
+		{
+			var username = User.Identity.Name;
+			Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
+            Course course =await _context.Course.FirstOrDefaultAsync(c=>c.CourseId == courseid);
+            Billing billing = new Billing();
+			if (ModelState.IsValid)
             {
-                _context.Add(billing);
+                var billingCard=new BillingCard();
+
+                 billingCard = await _context.BillingCard.FirstOrDefaultAsync(c => c.CardNumber == cardNumber); 
+
+                //razdvojeni uslovi zbog razlicitih ishoda gresaka
+                if(billingCard is null)
+                    //treba napisati da je greska u broju kartice 
+                    return RedirectToAction("CourseBilling", "Billing", new { id = courseid });
+                if(billingCard.CVV!=cvv)
+                    //treba napisati da je greska u cvv 
+                    return RedirectToAction("CourseBilling", "Billing", new { id = courseid });
+                if(student.AccountBalance<course.Price)
+                    //treba napisati da nema para
+                    return RedirectToAction("CourseBilling", "Billing", new { id = courseid });
+
+                billing.BillingCard = billingCard;
+                billing.IsPurchaseSuccessful = true;
+                billing.BillingCardId = billingCard.BillingCardId;
+                billing.user = student;
+              billing.CreatedAt = DateTime.Now;
+                billing.Course = course;
+                billing.CourseId=courseid;
+
+                CourseProgress courseProgress = new CourseProgress();
+                courseProgress.StudentId = student.UserId;
+                courseProgress.Course = course;
+                courseProgress.CourseId = course.CourseId;
+                courseProgress.Progress = 0;
+                courseProgress.Hours = 0;
+                courseProgress.IsCompleted = false;
+                courseProgress.LastAccess= DateTime.Now;
+
+                _context.Add(courseProgress);
+
+            _context.Add(billing);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Course", new { id = courseid });
+
             }
             ViewData["BillingCardId"] = new SelectList(_context.BillingCard, "BillingCardId", "BillingCardId", billing.BillingCardId);
             ViewData["CourseId"] = new SelectList(_context.Course, "CourseId", "CourseId", billing.CourseId);
-            return View(billing);
+            return RedirectToAction("Details", "Course", new { id = courseid });
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Billing/Edit/5
@@ -172,11 +229,6 @@ namespace BrainBoost.Controllers
         }
 
 
-        ///GET: Billing/CourseBilling
-        public IActionResult CourseBilling()
-        {
-            return View();
-        }
 
         // TODO: POST: Billing/CourseBilling
 

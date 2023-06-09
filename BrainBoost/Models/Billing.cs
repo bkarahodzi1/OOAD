@@ -13,6 +13,8 @@ namespace BrainBoost.Models
         [ForeignKey("BillingCard")]
         public int BillingCardId { get; set; }
         public virtual BillingCard BillingCard { get; set; }
+        [NotMapped] // Exclude this property from database mapping
+        public string CardNumber { get; set; }
 
         [ForeignKey("Course")]
         public int CourseId { get; set; }

@@ -9,6 +9,7 @@ using BrainBoost.Data;
 using BrainBoost.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace BrainBoost.Controllers
 {
@@ -31,47 +32,51 @@ namespace BrainBoost.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Course/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Course == null)
-            {
-                return NotFound();
-            }
-
-            var course = await _context.Course
-                .Include(c => c.Professor)
-                .FirstOrDefaultAsync(m => m.CourseId == id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            return View(course);
-        }
-
         // GET: Course/Create
         public IActionResult Create()
         {
-            ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId");
+            string username = User.Identity.Name;
+            List<string> currencies = new List<string>
+            {
+                "USD", "EUR", "GBP", "KM"
+            };
+            SelectList slCurrencies=new SelectList(currencies);
+            ViewBag.Currencies = slCurrencies;
             return View();
         }
+
 
         // POST: Course/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseId,ProfessorId,CourseName,Description,Price,Currency,CompletedCount,CompletedPercentage,CreatedAt,UpdatedAt")] Course course)
+        public async Task<IActionResult> Create([Bind("CourseName,Description,Price,Currency")] Course course)
         {
             if (ModelState.IsValid)
+
             {
-                _context.Add(course);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+                var username = User.Identity.Name;
+
+                try
+                {
+                    Professor professor = await _context.Professor.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
+                    course.CreatedAt = DateTime.Now;
+                    course.UpdatedAt = DateTime.Now;
+                    course.Professor = professor;
+                    course.ProfessorId = professor.UserId;
+                    _context.Add(course);
+                    await _context.SaveChangesAsync();
+                }
+                catch {; }
+
             ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId", course.ProfessorId);
-            return View(course);
+
+                return RedirectToAction(nameof(Details), new { id = course.CourseId });
+            }
+            else { return View(); }
+           
+            return View();
         }
 
         // GET: Course/Edit/5
@@ -215,13 +220,27 @@ namespace BrainBoost.Controllers
         }
         public IActionResult MyCourses()
         {
-            var courses = _context.CourseProgress
-                .Include(c => c.Course)
-                .ThenInclude(s => s.Professor)
-                .Include(c => c.Student)
-                .Where(c => c.Student.Username.Equals(User.Identity.Name))
-                .ToList();
-            return View(courses);
+            if(User.IsInRole("Student"))
+            {
+             var courses = _context.CourseProgress
+                            .Include(c => c.Course)
+                            .ThenInclude(s => s.Professor)
+                            .Include(c => c.Student)
+                            .Where(c => c.Student.Username.Equals(User.Identity.Name))
+                            .ToList();
+                return View(courses);
+            }
+           else if(User.IsInRole("Professor"))
+            {
+                var courses = _context.CourseProgress
+                            .Include(c => c.Course)
+                            .ThenInclude(s => s.Professor)
+                            .Include(c => c.Student)
+                            .Where(c => c.Course.Professor.Username.Equals(User.Identity.Name))
+                            .ToList();
+                return View(courses);
+            }
+            return NotFound();
         }
         public IActionResult CourseSearch()
         {
@@ -273,6 +292,58 @@ namespace BrainBoost.Controllers
 
             return RedirectToAction("Details", new { id = course.CourseId });
         }
+        // GET: Course/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Course == null)
+            {
+                return NotFound();
+            }
+
+            var course = await _context.Course
+                .Include(c => c.Professor)
+                .FirstOrDefaultAsync(m => m.CourseId == id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            if (User.IsInRole("Student"))
+            {
+                var username = User.Identity.Name;
+                Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
+                var courseProgress = await _context.CourseProgress
+                .Include(cp=>cp.Student)
+                .FirstOrDefaultAsync(cp => cp.CourseId == id&& cp.StudentId==student.UserId);
+
+            
+
+            
+                Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId&&b.CourseId==id);
+
+                if (courseProgress != null && courseProgress.StudentId.Equals(student.UserId))
+                {
+                    // Update the LastAccess property
+                    courseProgress.LastAccess = DateTime.Now;
+
+                    // Save changes to the database
+                    await _context.SaveChangesAsync();
+                }
+
+                if (billing!=null && billing.CourseId==id&& billing.IsPurchaseSuccessful)
+                {
+                    ViewData["isPaid"] = "true";
+                    ViewData["Controller"] = "Course";
+                    ViewData["Action"] = "Details";
+                    return View(course);
+                }
+            }
+            
+            ViewData["controller"] = "Billing";
+            ViewData["action"] = "CourseBilling";
+
+            return View(course);
+        }
+
 
     }
 }

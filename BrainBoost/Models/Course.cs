@@ -14,9 +14,14 @@ namespace BrainBoost.Models
         public int ProfessorId { get; set; }
         public Professor Professor { get; set; }
 
+        [Display(Name = "Course name")]
+        [Required(ErrorMessage = "Course name is required.")]
         public string CourseName { get; set; }
+        [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
+        [Required(ErrorMessage = "Price is required.")]
         public double? Price { get; set; }
+        [Required(ErrorMessage = "Currency is required.")]
         public string Currency { get; set; }
         public int CompletedCount { get; set; }
         public double CompletedPercentage { get; set; }
