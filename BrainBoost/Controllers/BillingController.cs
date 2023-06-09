@@ -105,13 +105,28 @@ namespace BrainBoost.Controllers
               billing.CreatedAt = DateTime.Now;
                 billing.Course = course;
                 billing.CourseId=courseid;
-                _context.Add(billing);
+
+                CourseProgress courseProgress = new CourseProgress();
+                courseProgress.StudentId = student.UserId;
+                courseProgress.Course = course;
+                courseProgress.CourseId = course.CourseId;
+                courseProgress.Progress = 0;
+                courseProgress.Hours = 0;
+                courseProgress.IsCompleted = false;
+                courseProgress.LastAccess= DateTime.Now;
+
+                _context.Add(courseProgress);
+
+            _context.Add(billing);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Course", new { id = courseid });
+
             }
             ViewData["BillingCardId"] = new SelectList(_context.BillingCard, "BillingCardId", "BillingCardId", billing.BillingCardId);
             ViewData["CourseId"] = new SelectList(_context.Course, "CourseId", "CourseId", billing.CourseId);
-            return View(billing);
+            return RedirectToAction("Details", "Course", new { id = courseid });
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Billing/Edit/5

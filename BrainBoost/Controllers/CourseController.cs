@@ -40,7 +40,8 @@ namespace BrainBoost.Controllers
             {
                 "USD", "EUR", "GBP", "KM"
             };
-            ViewBag.Currencies = new SelectList(currencies);
+            SelectList slCurrencies=new SelectList(currencies);
+            ViewBag.Currencies = slCurrencies;
             return View();
         }
 
@@ -306,24 +307,29 @@ namespace BrainBoost.Controllers
             {
                 return NotFound();
             }
-            var courseProgress = await _context.CourseProgress
-                .Include(cp=>cp.Student)
-                .FirstOrDefaultAsync(cp => cp.CourseId == id);
-
-            if (courseProgress != null && courseProgress.Student.Username.Equals(User.Identity.Name))
+            if (User.IsInRole("Student"))
             {
-                // Update the LastAccess property
-                courseProgress.LastAccess = DateTime.Now;
+                var username = User.Identity.Name;
+                Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
+                var courseProgress = await _context.CourseProgress
+                .Include(cp=>cp.Student)
+                .FirstOrDefaultAsync(cp => cp.CourseId == id&& cp.StudentId==student.UserId);
 
-                // Save changes to the database
-                await _context.SaveChangesAsync();
-            }
+            
 
-            if (User.IsInRole("Student")) { 
-            var username = User.Identity.Name;
-            Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
-                Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId);
-                if(billing!=null && billing.CourseId==id&& billing.IsPurchaseSuccessful)
+            
+                Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId&&b.CourseId==id);
+
+                if (courseProgress != null && courseProgress.StudentId.Equals(student.UserId))
+                {
+                    // Update the LastAccess property
+                    courseProgress.LastAccess = DateTime.Now;
+
+                    // Save changes to the database
+                    await _context.SaveChangesAsync();
+                }
+
+                if (billing!=null && billing.CourseId==id&& billing.IsPurchaseSuccessful)
                 {
                     ViewData["isPaid"] = "true";
                     ViewData["Controller"] = "Course";
