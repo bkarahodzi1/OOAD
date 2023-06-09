@@ -1,8 +1,10 @@
-﻿@model IEnumerable<BrainBoost.Models.Course>
+﻿@model IEnumerable<BrainBoost.Models.CourseProgress>
 
 @{
     ViewData["Title"] = "Index";
 }
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 @if (Model.Count() == 0)
 {
@@ -22,26 +24,51 @@ else
                 <th>
                     Course
                 </th>
+                <th>
+                    Number of students
+                </th>
+                <th>
+                    Students completed
+                </th>
+                <th>
+                    Total hours viewed
+                </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in ViewBag.courseMap)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CourseName)
+                        @item.Value["courseName"]
+                    </td>
+                    <td>
+                        @item.Value["numberOfStudents"]
+                    </td>
+                    <td>
+                        @item.Value["studentsCompleted"]
+                    </td>
+                    <td>
+                        @item.Value["totalHours"]
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <h2>Students by hours viewed</h2>
-    <p style="margin-bottom: 50px">Shows chart of your students in each course</p>
+    <h2>Course by enrolled students</h2>
+    <p style="margin-bottom: 50px">Shows number of enrolled students in your courses.</p>
 
     <div class="chart">
         <canvas id="doughnutchart"></canvas>
+    </div>
+
+    <h2>Course by completed students</h2>
+    <p style="margin-bottom: 50px">Shows number of students that finished and completed your courses.</p>
+
+    <div class="chart">
+        <canvas id="doughnutchart2"></canvas>
     </div>
 }
 
@@ -52,16 +79,21 @@ else
 <script>
 
     var doughnutchartCanvas = document.getElementById("doughnutchart");
+    var doughnutchartCanvas2 = document.getElementById("doughnutchart2");
 
-     var studentname = [];
-     var score = [];
+
+     var courseName = [];
+    var score = [];
+    var score2 = [];
+
 
     @if(Model.Count()>0)
     {
-        foreach(var item in Model)
+        foreach(var item in ViewBag.courseMap)
         {
-            @:studentname.push('@item.CourseName');
-            @:score.push(@item.CompletedCount);
+            @:courseName.push('@item.Value["courseName"]');
+            @:score.push(@item.Value["numberOfStudents"]);
+            @:score2.push(@item.Value["studentsCompleted"]);
         }
     }
 
@@ -69,7 +101,7 @@ else
     var doughnutChart = new Chart(doughnutchartCanvas, {
         type: 'doughnut',
         data: {
-            labels: studentname,
+            labels: courseName,
         datasets: [{
             data: score,
             borderWidth: 0,
@@ -91,6 +123,42 @@ else
     },
         options: {
             responsive:true,
+            legend: {
+                position: "bottom",
+                labels: {
+                    boxWidth: 11,
+                    fontColor: "#757681",
+                    fontSize: 11
+                }
+            }
+        }
+    });
+
+    var doughnutChart2 = new Chart(doughnutchartCanvas2, {
+        type: 'doughnut',
+        data: {
+            labels: courseName,
+            datasets: [{
+                data: score2,
+                borderWidth: 0,
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(157, 230, 41)',
+                    'rgb(41, 224, 230)',
+                    'rgb(255, 255, 0)'
+                ],
+                hoverBackgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(157, 230, 41)',
+                    'rgb(41, 224, 230)',
+                    'rgb(255, 255, 0)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
             legend: {
                 position: "bottom",
                 labels: {

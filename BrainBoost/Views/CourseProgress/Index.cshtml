@@ -13,10 +13,6 @@
 }
 else
 {
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-
     <h2>Your enrolled courses</h2>
     <p style="margin-bottom: 25px">Shows how much hours you have spent on each enrolled course.</p>
 
@@ -63,11 +59,6 @@ else
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Hours)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.CourseProgressId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.CourseProgressId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.CourseProgressId">Delete</a>
                     </td>
                 </tr>
             }
