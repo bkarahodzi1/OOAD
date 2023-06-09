@@ -9,17 +9,26 @@
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
+        @if (TempData["UsernamePostoji"] != null)
+        {
+            <div class="text-danger">
+                <ul>
+                    <li>@TempData["UsernamePostoji"]</li>
+                </ul>
+            </div>
+        }
         <form id="profile-form" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
-                <input asp-for="Username" class="form-control" disabled />
                 <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" class="form-control" disabled />
             </div>
             <div class="form-floating">
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                <label asp-for="Input.NewUsername" class="form-label"></label>
+                <input asp-for="Input.NewUsername" class="form-control" />
+                <span asp-validation-for="Input.NewUsername" class="text-danger"></span>
             </div>
+            <br />
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
