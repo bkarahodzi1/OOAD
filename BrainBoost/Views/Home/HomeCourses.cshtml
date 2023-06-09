@@ -1,12 +1,41 @@
-﻿@{
-        ViewData["Title"] = "Home Courses";
- }
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<div class="text-center">
-    <h1 class="display-4">Home Courses</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+﻿<div class="d-flex justify-content-end mt-2 mr-2" style="margin-bottom: -100px;">
+    @if (ViewData["LastAccessedCourse"] != null)
+    {
+        <p>Last accessed course: @ViewData["LastAccessedCourse"]</p>
+    }
+    else
+    {
+        <p>No courses accessed yet.</p>
+    }
 </div>
+
+
+<div class="grid-container index-landing" style="margin-bottom: -100px;">
+    <img src="https://user-images.githubusercontent.com/62642796/227766262-4059e3bf-f536-418c-8e80-2f0d7359d06d.png" alt="Flowers in Chania">
+    <div class="landing-description">
+        <h1>Engaging courses on a wide range of subjects </h1>
+        <p>Ignite your learning potential with BrainBoost, the ultimate educational platform. Explore diverse courses, crafted by professors, and empower your knowledge through interactive lessons, curated materials, and stimulating quizzes. Join us today and unleash the power of your mind.</p>
+    </div>
+</div>
+
+
+<div class="container mt-4 text-center" style="margin-bottom: 50px;">
+    <p>With BrainBoost, you can:</p>
+    <ul style="list-style-position: inside;">
+        <li>Access diverse courses covering a wide range of topics.</li>
+        <li>Learn from experienced instructors who are experts in their fields.</li>
+        <li>Track your progress and get feedback through our interactive grading system.</li>
+        <li>Connect with other students and join a global learning community.</li>
+    </ul>
+    <p>Whether you're looking to upgrade your skills, change careers, or expand your knowledge, BrainBoost is the place for you. Join us today and embark on your learning journey with us!</p>
+    <div class="d-flex justify-content-center">
+        <a asp-area="" asp-controller="Course" asp-action="CourseSearch" class="btn btn-primary">Start learning now</a>
+    </div>
+</div>
+
+<div class="text-center mt-5">
+    <p>Contact us: <a href="mailto:brainboostmvc@gmail.com">brainboostmvc@gmail.com</a></p>
+</div
 
 @if (TempData["SuccessMessage"] != null)
 {
