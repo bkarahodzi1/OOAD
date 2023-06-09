@@ -88,12 +88,23 @@
     </dl>
     <table class="table table-striped table-bordered">
         <colgroup>
-            <col style="width: 100%">
+            <col style="width: 80%">
+            <col style="width: 20%">
         </colgroup>
         <thead class="thead-dark">
             <tr>
                 <th>Course Materials</th>
+                <th>Last Updated</th>
             </tr>
         </thead>
+        <tbody>
+            @foreach (var material in (List<BrainBoost.Models.CourseMaterial>)ViewData["CourseMaterials"])
+            {
+                <tr>
+                    <td>@material.Name</td>
+                    <td>@material.UpdatedAt</td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>

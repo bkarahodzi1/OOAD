@@ -232,13 +232,11 @@ namespace BrainBoost.Controllers
             }
            else if(User.IsInRole("Professor"))
             {
-                var courses = _context.CourseProgress
-                            .Include(c => c.Course)
-                            .ThenInclude(s => s.Professor)
-                            .Include(c => c.Student)
-                            .Where(c => c.Course.Professor.Username.Equals(User.Identity.Name))
-                            .ToList();
-                return View(courses);
+                var courses = _context.Course
+                        .Include(s => s.Professor)
+                        .Where(c => c.Professor.Username.Equals(User.Identity.Name))
+                        .ToList();
+                return View("MyCourses(Professor)", courses);
             }
             return NotFound();
         }
@@ -289,8 +287,12 @@ namespace BrainBoost.Controllers
                 // Save changes to the database
                 await _context.SaveChangesAsync();
             }
+            var courseMaterials = await _context.CourseMaterial
+                .Where(cm => cm.CourseId == id)
+                .ToListAsync();
 
-            return RedirectToAction("Details", new { id = course.CourseId });
+            ViewData["CourseMaterials"] = courseMaterials;
+            return View("Details", course);
         }
         // GET: Course/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -340,6 +342,11 @@ namespace BrainBoost.Controllers
             
             ViewData["controller"] = "Billing";
             ViewData["action"] = "CourseBilling";
+            var courseMaterials = await _context.CourseMaterial
+                .Where(cm => cm.CourseId == id)
+                .ToListAsync();
+
+            ViewData["CourseMaterials"] = courseMaterials;
 
             return View(course);
         }
