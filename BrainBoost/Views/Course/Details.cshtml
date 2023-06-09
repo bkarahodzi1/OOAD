@@ -5,7 +5,7 @@
 
     var controller = ViewData["Controller"];
     var action = ViewData["Action"];
-    bool isPaid = ViewData["isPaid"]=="true" ? true : false;
+    bool isEnrolled = ViewData["isEnrolled"]=="true" ? true : false;
 
 }
 
@@ -23,7 +23,7 @@
 
 <div>
     <h4 class="float-left">Course</h4>
-    @if (!User.IsInRole("Professor") && Model.Price > 0 && !isPaid)
+    @if (!User.IsInRole("Professor") && !isEnrolled)
     {
         <a asp-controller="@controller" asp-action="@action" asp-route-id="@Model.CourseId" class="btn button active float-right">Enroll me</a>
     }
@@ -88,12 +88,23 @@
     </dl>
     <table class="table table-striped table-bordered">
         <colgroup>
-            <col style="width: 100%">
+            <col style="width: 80%">
+            <col style="width: 20%">
         </colgroup>
         <thead class="thead-dark">
             <tr>
                 <th>Course Materials</th>
+                <th>Last Updated</th>
             </tr>
         </thead>
+        <tbody>
+            @foreach (var material in (IEnumerable<BrainBoost.Models.CourseMaterial>)ViewData["CourseMaterials"])
+            {
+                <tr>
+                    <td>@material.Name</td>
+                    <td>@material.UpdatedAt</td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>

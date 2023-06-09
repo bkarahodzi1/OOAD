@@ -18,8 +18,13 @@
             flex-grow: 1;
         }
 
-        .btn-primary {
-            flex-shrink: 0;
+        .button.active {
+            background-color: #4e73df;
+            color: white;
+        }
+
+        .button:hover {
+            background-color: #858796;
         }
 
         .clickable-row {
@@ -35,7 +40,7 @@
             <div class="input-group">
                 <input type="text" id="searchInput" name="searchString" placeholder="Search for a course..." class="form-control">
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn button active">Search</button>
                 </div>
             </div>
         </form>
