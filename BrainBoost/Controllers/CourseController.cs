@@ -223,7 +223,7 @@ namespace BrainBoost.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SubmitRefundRequest(string reason)
         {
-            TempData["SuccessMessage"] = "Vaš zahtjev za refund je uspješno poslan!";
+            TempData["SuccessMessage"] = "Vaï¿½ zahtjev za refund je uspjeï¿½no poslan!";
             return RedirectToAction("Index", "Home");
         }
         public IActionResult MyCourses()
@@ -431,9 +431,6 @@ namespace BrainBoost.Controllers
                 var courseProgress = await _context.CourseProgress
                 .Include(cp => cp.Student)
                 .FirstOrDefaultAsync(cp => cp.CourseId == id && cp.StudentId == student.UserId);
-
-
-
 
                 Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId && b.CourseId == id);
                 if (courseProgress == null && course.Price == 0)

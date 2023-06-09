@@ -1,6 +1,11 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http.Extensions
+
+@{
     var divClass = @ViewData["CssClass"] == null ? "" : @ViewData["CssClass"];
     @ViewBag.id = @TempData["Kljuc"];
+    var url = @Context.Request.GetEncodedUrl();
+    var postavkeAktivnaKlasa = url.Contains("/Identity/Account/Manage") ? "active" : "";
+    
 }
 
 <!DOCTYPE html>
@@ -30,7 +35,7 @@
     <header class="grid-header">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow header">
             <div class="container">
-             
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -65,102 +70,102 @@
         {<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Početna -->
-    <li class="nav-item @Html.ActiveClass("Home", "Index") @Html.ActiveClass("Home", "HomeCourses")">
-        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Home</span>
-        </a>
-    </li>
+                <!-- Nav Item - Početna -->
+                <li class="nav-item @Html.ActiveClass("Home", "Index") @Html.ActiveClass("Home", "HomeCourses")">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
 
-    <!-- Nav Item - Moji kursevi -->
-    <li class="nav-item @Html.ActiveClass("Course", "MyCourses")">
-        <a class="nav-link" asp-area="" asp-controller="Course" asp-action="MyCourses">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>My courses</span>
-        </a>
-    </li>
+                <!-- Nav Item - Moji kursevi -->
+                <li class="nav-item @Html.ActiveClass("Course", "MyCourses")">
+                    <a class="nav-link" asp-area="" asp-controller="Course" asp-action="MyCourses">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>My courses</span>
+                    </a>
+                </li>
 
-    <!-- Nav Item - Pretraga kurseva -->
-    <li class="nav-item @Html.ActiveClass("Course", "CourseSearch")">
-        <a class="nav-link" asp-area="" asp-controller="Course" asp-action="CourseSearch">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Search courses</span>
-        </a>
-    </li>
-
-
-    <!-- Nav Item - Kreiraj kurs -->
-    @if (User.IsInRole("Professor"))
-        {
-        <li class="nav-item @Html.ActiveClass("Course", "Create")">
-            <a class="nav-link" asp-area="" asp-controller="Course" asp-action="Create">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Create course</span>
-            </a>
-        </li>
-        }
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+                <!-- Nav Item - Pretraga kurseva -->
+                <li class="nav-item @Html.ActiveClass("Course", "CourseSearch")">
+                    <a class="nav-link" asp-area="" asp-controller="Course" asp-action="CourseSearch">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Search courses</span>
+                    </a>
+                </li>
 
 
-    <!-- Nav Item - Statistika -->
-    <li class="nav-item @Html.ActiveClass("CourseProgress", "Index")">
-        <a class="nav-link" asp-area="" asp-controller="CourseProgress" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Statistics</span>
-        </a>
-    </li>
+                <!-- Nav Item - Kreiraj kurs -->
+                @if (User.IsInRole("Professor"))
+                {
+                    <li class="nav-item @Html.ActiveClass("Course", "Create")">
+                        <a class="nav-link" asp-area="" asp-controller="Course" asp-action="Create">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Create course</span>
+                        </a>
+                    </li>
+                }
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+                <!-- Divider -->
+                <hr class="sidebar-divider">
 
-    <!-- Nav Item - Profil -->
-    @if (User.IsInRole("Professor"))
-    {
-        <li class="nav-item @Html.ActiveClass("Professor", "Edit")">
-            <a class="nav-link" asp-area="" asp-controller="Professor" asp-action="Edit" asp-route-id="@ViewBag.id">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Profile</span>
-            </a>
-        </li>
-    }
 
-    @if (User.IsInRole("Student"))
-    {
-        <li class="nav-item @Html.ActiveClass("Student", "Edit")">
-            <a class="nav-link" asp-area="" asp-controller="Student" asp-action="Edit" asp-route-id="@ViewBag.id">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Profile</span>
-            </a>
-        </li>
-    }
-                
+                <!-- Nav Item - Statistika -->
+                <li class="nav-item @Html.ActiveClass("CourseProgress", "Index")">
+                    <a class="nav-link" asp-area="" asp-controller="CourseProgress" asp-action="Index">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Statistics</span>
+                    </a>
+                </li>
 
-    <!-- Nav Item - Postavke -->
-    <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Settings</span>
-        </a>
-    </li>
+                <!-- Divider -->
+                <hr class="sidebar-divider">
 
-    <!-- Nav Item - Feedback -->
-    <li class="nav-item @Html.ActiveClass("Feedback", "FeedbackRate") @Html.ActiveClass("Feedback", "FeedbackSuccess")">
-        <a class="nav-link" asp-area="" asp-controller="Feedback" asp-action="FeedbackRate">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Feedback</span>
-        </a>
-    </li>
+                <!-- Nav Item - Profil -->
+                @if (User.IsInRole("Professor"))
+                {
+                    <li class="nav-item @Html.ActiveClass("Professor", "Edit")">
+                        <a class="nav-link" asp-area="" asp-controller="Professor" asp-action="Edit" asp-route-id="@ViewBag.id">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                }
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+                @if (User.IsInRole("Student"))
+                {
+                    <li class="nav-item @Html.ActiveClass("Student", "Edit")">
+                        <a class="nav-link" asp-area="" asp-controller="Student" asp-action="Edit" asp-route-id="@ViewBag.id">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                }
 
-</ul>
+
+                <!-- Nav Item - Postavke -->
+                <li class="nav-item @postavkeAktivnaKlasa">
+                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+
+                <!-- Nav Item - Feedback -->
+                <li class="nav-item @Html.ActiveClass("Feedback", "FeedbackRate") @Html.ActiveClass("Feedback", "FeedbackSuccess")">
+                    <a class="nav-link" asp-area="" asp-controller="Feedback" asp-action="FeedbackRate">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Feedback</span>
+                    </a>
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+            </ul>
             <!-- End of Sidebar -->
         }
         <!-- Content Wrapper -->

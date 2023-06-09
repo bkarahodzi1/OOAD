@@ -31,10 +31,11 @@ namespace BrainBoost.Controllers
             System.Diagnostics.Debug.WriteLine(isAuthenticated);
             if (User.IsInRole("Professor"))
             {
+                if(isAuthenticated)
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
             else
-            {
+            {  if(isAuthenticated)
                 TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
             if (isAuthenticated)

@@ -8,8 +8,13 @@ namespace BrainBoost.Models
         [Key]
         public int FeedbackId { get; set; }
 
+        [Display(Name = "Rate")]
         public int Rate { get; set; }
+
+        [Display(Name = "Comment")]
         public string Comment { get; set; }
+
+        [Display(Name = "Created at")]
         public DateTime CreatedAt { get; set; }
 
         public Feedback () { }

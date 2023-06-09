@@ -13,6 +13,8 @@ namespace BrainBoost.Models
         [ForeignKey("BillingCard")]
         public int BillingCardId { get; set; }
         public virtual BillingCard BillingCard { get; set; }
+
+        [Display(Name = "Card number")]
         [NotMapped] // Exclude this property from database mapping
         public string CardNumber { get; set; }
 
@@ -20,7 +22,10 @@ namespace BrainBoost.Models
         public int CourseId { get; set; }
         public virtual Course Course { get; set; }
 
+        [Display(Name = "Created at")]
         public DateTime CreatedAt { get; set; }
+
+        [Display(Name = "Is purchase successful")]
         public bool IsPurchaseSuccessful { get; set; }
 
         public Billing() { }

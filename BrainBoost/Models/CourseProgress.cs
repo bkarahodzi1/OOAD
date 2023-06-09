@@ -21,9 +21,14 @@ namespace BrainBoost.Models
         [DisplayName("Last accessed")]
         public DateTime? LastAccess { get; set; }
 
+        [Display(Name = "Progress")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:P0}")]
         public double Progress { get; set; }
+
+        [Display(Name = "Is completed")]
         public bool IsCompleted { get; set; }
+
+        [Display(Name = "Hours")]
         public int Hours { get; set; }
 
         public CourseProgress() { }
