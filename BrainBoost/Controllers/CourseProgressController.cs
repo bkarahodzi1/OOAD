@@ -27,11 +27,59 @@ namespace BrainBoost.Controllers
             //Ako je profesor dohvacamo kreirane kurseve za statistiku
             if (User.IsInRole("Professor"))
             {
-                var courses = await _context.Course
-                                              .Include(c => c.Professor)
-                                              .Where(c => c.Professor.Username.Equals(User.Identity.Name))
-                                              .ToListAsync();
-                return View("ProfessorStatistics", courses);
+                var courseProgresses = await _context.CourseProgress.
+                    Include(c => c.Course).
+                    Include(c => c.Student).
+                    Where(c => c.Course.Professor.Username.Equals(User.Identity.Name)).ToListAsync();
+
+                ///Mapiranje podataka u custom mapu koja je proslijeđena u ViewBag, da se ne prikazuju dupli kursevi
+                var courseMap = new Dictionary<int, Dictionary<string, dynamic>>();
+                foreach (CourseProgress item in courseProgresses)
+                {
+                   if(!courseMap.ContainsKey(item.CourseId))
+                    {
+                        courseMap.Add(item.CourseId, new Dictionary<string, dynamic>());
+                        courseMap[item.CourseId].Add("numberOfStudents", 0);
+                        courseMap[item.CourseId].Add("studentsCompleted", 0);
+                        courseMap[item.CourseId].Add("totalHours", 0);
+                        courseMap[item.CourseId].Add("courseName", item.Course.CourseName);
+                        courseMap[item.CourseId].Add("studentList", new List<Dictionary<string, dynamic>>());
+                    }
+
+                    courseMap[item.CourseId]["numberOfStudents"]++;
+                    courseMap[item.CourseId]["totalHours"]+=item.Hours;
+
+                    Dictionary<string, dynamic> student = new Dictionary<string, dynamic>();
+                    student.Add("id", item.StudentId);
+                    student.Add("firstName", item.Student.FirstName);
+                    student.Add("lastName", item.Student.LastName);
+                    student.Add("userName", item.Student.Username);
+                    student.Add("hours", item.Hours);
+                    courseMap[item.CourseId]["studentList"].Add(new Dictionary<string, dynamic>(student));
+                    if(item.Progress >= 1)
+                    {
+                        courseMap[item.CourseId]["studentsCompleted"]++;
+                    }
+
+                }
+
+                ///Sortiranje prema broju upisanih studenata
+                var sourtedCourseMap = from entry in courseMap orderby entry.Value["numberOfStudents"] descending select entry;
+                ViewBag.courseMap = sourtedCourseMap;
+
+                ///Ispisivanje u konzolu
+                foreach (var kvp in sourtedCourseMap)
+                {
+                    Console.WriteLine("Key = {0}", kvp.Key);
+                    foreach (var kvp2 in kvp.Value)
+                    {
+                        Console.WriteLine("Key2 = {0}, Value2 = {1}", kvp2.Key, kvp2.Value);
+
+                    }
+
+                }
+
+                return View("ProfessorStatistics", courseProgresses);
             }
             ///Ako je student dohvacamo enrollane kurseve za statistiku
             else
