@@ -35,6 +35,14 @@ namespace BrainBoost.Controllers
         // GET: Course/Create
         public IActionResult Create()
         {
+            if(User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             string username = User.Identity.Name;
             List<string> currencies = new List<string>
             {
@@ -220,7 +228,15 @@ namespace BrainBoost.Controllers
         }
         public IActionResult MyCourses()
         {
-            if(User.IsInRole("Student"))
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            if (User.IsInRole("Student"))
             {
              var courses = _context.CourseProgress
                             .Include(c => c.Course)
@@ -244,6 +260,14 @@ namespace BrainBoost.Controllers
         }
         public IActionResult CourseSearch()
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             var courses = _context.Course.Include(c => c.Professor).ToList();
             return View(courses);
         }
@@ -263,6 +287,14 @@ namespace BrainBoost.Controllers
         }
         public async Task<IActionResult> DetailsForMyCourses(int? id)
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             if (id == null || _context.Course == null)
             {
                 return NotFound();
@@ -295,6 +327,14 @@ namespace BrainBoost.Controllers
         // GET: Course/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             if (id == null || _context.Course == null)
             {
                 return NotFound();

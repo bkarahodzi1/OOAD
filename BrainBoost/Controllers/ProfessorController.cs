@@ -7,15 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BrainBoost.Controllers
 {
     public class ProfessorController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ProfessorController(ApplicationDbContext context)
+        public ProfessorController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -54,7 +57,7 @@ namespace BrainBoost.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,FirstName,LastName,Username,Email,BirthDate,CreatedAt,IsVerified")] Professor professor)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Username,BirthDate")] Professor professor)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +71,7 @@ namespace BrainBoost.Controllers
         // GET: Professor/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             if (id == null || _context.Professor == null)
             {
                 return NotFound();
@@ -86,18 +90,16 @@ namespace BrainBoost.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,FirstName,LastName,Username,Email,BirthDate,CreatedAt,IsVerified")] Professor professor)
+        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,BirthDate")] Professor professor)
         {
-            if (id != professor.UserId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(professor);
+                    var profa = await _context.Professor.FindAsync(id);
+                    profa.FirstName = professor.FirstName;
+                    profa.LastName = professor.LastName;
+                    profa.BirthDate = professor.BirthDate;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -111,7 +113,7 @@ namespace BrainBoost.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                TempData["Podaci"] = "You have successfully changed your personal information.";
             }
             return View(professor);
         }
@@ -183,6 +185,6 @@ namespace BrainBoost.Controllers
         }
 
         // TODO: POST: Professor/CreateCourseContent
-
+        
     }
 }

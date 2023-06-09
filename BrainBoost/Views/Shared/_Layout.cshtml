@@ -1,5 +1,6 @@
 ﻿@{
     var divClass = @ViewData["CssClass"] == null ? "" : @ViewData["CssClass"];
+    @ViewBag.id = @TempData["Kljuc"];
 }
 
 <!DOCTYPE html>
@@ -119,12 +120,26 @@
     <hr class="sidebar-divider">
 
     <!-- Nav Item - Profil -->
-    <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Profile</span>
-        </a>
-    </li>
+    @if (User.IsInRole("Professor"))
+    {
+        <li class="nav-item @Html.ActiveClass("Professor", "Edit")">
+            <a class="nav-link" asp-area="" asp-controller="Professor" asp-action="Edit" asp-route-id="@ViewBag.id">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+    }
+
+    @if (User.IsInRole("Student"))
+    {
+        <li class="nav-item @Html.ActiveClass("Student", "Edit")">
+            <a class="nav-link" asp-area="" asp-controller="Student" asp-action="Edit" asp-route-id="@ViewBag.id">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+    }
+                
 
     <!-- Nav Item - Postavke -->
     <li class="nav-item">

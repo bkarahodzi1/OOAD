@@ -169,6 +169,14 @@ namespace BrainBoost.Controllers
         ///GET: Feedback/FeedbackRate
         public IActionResult FeedbackRate()
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             return View();
         }
 

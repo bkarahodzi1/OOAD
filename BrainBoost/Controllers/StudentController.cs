@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BrainBoost.Controllers
 {
     public class StudentController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public StudentController(ApplicationDbContext context)
+        public StudentController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Student
@@ -68,6 +71,7 @@ namespace BrainBoost.Controllers
         // GET: Student/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             if (id == null || _context.Student == null)
             {
                 return NotFound();
@@ -86,18 +90,16 @@ namespace BrainBoost.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AccountBalance,UserId,FirstName,LastName,Username,Email,BirthDate,CreatedAt,IsVerified")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("AccountBalance,FirstName,LastName,BirthDate")] Student student)
         {
-            if (id != student.UserId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(student);
+                    var stu = await _context.Student.FindAsync(id);
+                    stu.FirstName = student.FirstName;
+                    stu.LastName = student.LastName;
+                    stu.BirthDate = student.BirthDate;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -111,7 +113,7 @@ namespace BrainBoost.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                TempData["Podaci"] = "You have successfully changed your personal information.";
             }
             return View(student);
         }

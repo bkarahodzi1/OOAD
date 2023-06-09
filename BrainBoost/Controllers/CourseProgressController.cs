@@ -24,6 +24,14 @@ namespace BrainBoost.Controllers
         // GET: CourseProgress
         public async Task<IActionResult> Index()
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             //Ako je profesor dohvacamo kreirane kurseve za statistiku
             if (User.IsInRole("Professor"))
             {

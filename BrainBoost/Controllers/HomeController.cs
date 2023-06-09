@@ -1,7 +1,9 @@
-﻿using BrainBoost.Models;
+﻿using BrainBoost.Data;
+using BrainBoost.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,11 @@ namespace BrainBoost.Controllers
     public class HomeController : Controller
     {
         private readonly IEmailSender _emailSender;
-        public HomeController(IEmailSender emailSender)
+        private ApplicationDbContext _context;
+        public HomeController(IEmailSender emailSender, ApplicationDbContext context)
         {
             _emailSender = emailSender;
+            _context = context;
         }
 
         //Landing page
@@ -27,6 +31,7 @@ namespace BrainBoost.Controllers
             System.Diagnostics.Debug.WriteLine(isAuthenticated);
             if (isAuthenticated)
             {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
                 return View("HomeCourses");
             }
             else return View();
