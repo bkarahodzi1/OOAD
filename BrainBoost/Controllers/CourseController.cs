@@ -32,43 +32,6 @@ namespace BrainBoost.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Course/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Course == null)
-            {
-                return NotFound();
-            }
-
-            var course = await _context.Course
-                .Include(c => c.Professor)
-                .FirstOrDefaultAsync(m => m.CourseId == id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-            if (User.IsInRole("Student")) { 
-            var username = User.Identity.Name;
-            Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
-                Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId);
-                if(billing!=null && billing.CourseId==id&& billing.IsPurchaseSuccessful)
-                {
-                    ViewData["isPaid"] = "true";
-                    ViewData["Controller"] = "Course";
-                    ViewData["Action"] = "Details";
-                    return View(course);
-                }
-            }
-            
-
-
-            ViewData["controller"] = "Billing";
-            ViewData["action"] = "CourseBilling";
-
-
-            return View(course);
-        }
-
         // GET: Course/Create
         public IActionResult Create()
         {
@@ -256,13 +219,27 @@ namespace BrainBoost.Controllers
         }
         public IActionResult MyCourses()
         {
-            var courses = _context.CourseProgress
-                .Include(c => c.Course)
-                .ThenInclude(s => s.Professor)
-                .Include(c => c.Student)
-                .Where(c => c.Student.Username.Equals(User.Identity.Name))
-                .ToList();
-            return View(courses);
+            if(User.IsInRole("Student"))
+            {
+             var courses = _context.CourseProgress
+                            .Include(c => c.Course)
+                            .ThenInclude(s => s.Professor)
+                            .Include(c => c.Student)
+                            .Where(c => c.Student.Username.Equals(User.Identity.Name))
+                            .ToList();
+                return View(courses);
+            }
+           else if(User.IsInRole("Professor"))
+            {
+                var courses = _context.CourseProgress
+                            .Include(c => c.Course)
+                            .ThenInclude(s => s.Professor)
+                            .Include(c => c.Student)
+                            .Where(c => c.Course.Professor.Username.Equals(User.Identity.Name))
+                            .ToList();
+                return View(courses);
+            }
+            return NotFound();
         }
         public IActionResult CourseSearch()
         {
@@ -314,6 +291,53 @@ namespace BrainBoost.Controllers
 
             return RedirectToAction("Details", new { id = course.CourseId });
         }
+        // GET: Course/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Course == null)
+            {
+                return NotFound();
+            }
+
+            var course = await _context.Course
+                .Include(c => c.Professor)
+                .FirstOrDefaultAsync(m => m.CourseId == id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            var courseProgress = await _context.CourseProgress
+                .Include(cp=>cp.Student)
+                .FirstOrDefaultAsync(cp => cp.CourseId == id);
+
+            if (courseProgress != null && courseProgress.Student.Username.Equals(User.Identity.Name))
+            {
+                // Update the LastAccess property
+                courseProgress.LastAccess = DateTime.Now;
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+            }
+
+            if (User.IsInRole("Student")) { 
+            var username = User.Identity.Name;
+            Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
+                Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId);
+                if(billing!=null && billing.CourseId==id&& billing.IsPurchaseSuccessful)
+                {
+                    ViewData["isPaid"] = "true";
+                    ViewData["Controller"] = "Course";
+                    ViewData["Action"] = "Details";
+                    return View(course);
+                }
+            }
+            
+            ViewData["controller"] = "Billing";
+            ViewData["action"] = "CourseBilling";
+
+            return View(course);
+        }
+
 
     }
 }

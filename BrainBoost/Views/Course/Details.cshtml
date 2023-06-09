@@ -9,10 +9,25 @@
 
 }
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .button.active{
+        background-color: #4e73df;
+        color: white;
+    }
+    .button:hover{
+        background-color: #858796;
+    }
+</style>
 <h1>Details</h1>
 
 <div>
-    <h4>Course</h4>
+    <h4 class="float-left">Course</h4>
+    @if (!User.IsInRole("Professor") && Model.Price > 0 && !isPaid)
+    {
+        <a asp-controller="@controller" asp-action="@action" asp-route-id="@Model.CourseId" class="btn button active float-right">Enroll me</a>
+    }
+    <div class="clearfix"></div>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -71,7 +86,14 @@
         </dd>
 
     </dl>
-    @if(!User.IsInRole("Professor")&&@Model.Price>0&& !(@isPaid)){
-    <a asp-controller=@controller asp-action=@action asp-route-id=@Model.CourseId class="btn btn-primary">Enroll me</a>
-    }
+    <table class="table table-striped table-bordered">
+        <colgroup>
+            <col style="width: 100%">
+        </colgroup>
+        <thead class="thead-dark">
+            <tr>
+                <th>Course Materials</th>
+            </tr>
+        </thead>
+    </table>
 </div>
