@@ -41,6 +41,11 @@ namespace BrainBoost.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             
             Username = userName;
+
+            Input = new InputModel
+            {
+                NewUsername = userName
+            };
         }
 
         public async Task<IActionResult> OnGetAsync()
