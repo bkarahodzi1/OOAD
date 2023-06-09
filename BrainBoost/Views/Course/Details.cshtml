@@ -5,7 +5,7 @@
 
     var controller = ViewData["Controller"];
     var action = ViewData["Action"];
-    bool isPaid = ViewData["isPaid"]=="true" ? true : false;
+    bool isEnrolled = ViewData["isEnrolled"]=="true" ? true : false;
 
 }
 
@@ -23,7 +23,7 @@
 
 <div>
     <h4 class="float-left">Course</h4>
-    @if (!User.IsInRole("Professor") && Model.Price > 0 && !isPaid)
+    @if (!User.IsInRole("Professor") && !isEnrolled)
     {
         <a asp-controller="@controller" asp-action="@action" asp-route-id="@Model.CourseId" class="btn button active float-right">Enroll me</a>
     }
