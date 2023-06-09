@@ -259,42 +259,6 @@ namespace BrainBoost.Controllers
 
             return View("CourseSearch", filteredCourses);
         }
-        public async Task<IActionResult> DetailsForMyCourses(int? id)
-        {
-            if (id == null || _context.Course == null)
-            {
-                return NotFound();
-            }
-
-            var course = await _context.Course
-                .Include(c => c.Professor)
-                .FirstOrDefaultAsync(m => m.CourseId == id);
-
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            // Find the CourseProgress entity
-            var courseProgress = await _context.CourseProgress
-                .FirstOrDefaultAsync(cp => cp.CourseId == id);
-
-            if (courseProgress != null)
-            {
-                // Update the LastAccess property
-                courseProgress.LastAccess = DateTime.Now;
-
-                // Save changes to the database
-                await _context.SaveChangesAsync();
-            }
-            var courseMaterials = await _context.CourseMaterial
-                .Where(cm => cm.CourseId == id)
-                .ToListAsync();
-
-            ViewData["CourseMaterials"] = courseMaterials;
-            return View("Details", course);
-        }
-       
         
         // GET: Course/Details/5
         public async Task<IActionResult> EnrollMe(int? id)
@@ -367,6 +331,42 @@ namespace BrainBoost.Controllers
 
             return View(course);
         }
+        public async Task<IActionResult> DetailsForMyCourses(int? id)
+        {
+            if (id == null || _context.Course == null)
+            {
+                return NotFound();
+            }
+
+            var course = await _context.Course
+                .Include(c => c.Professor)
+                .FirstOrDefaultAsync(m => m.CourseId == id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            // Find the CourseProgress entity
+            var courseProgress = await _context.CourseProgress
+                .FirstOrDefaultAsync(cp => cp.CourseId == id);
+
+            if (courseProgress != null)
+            {
+                // Update the LastAccess property
+                courseProgress.LastAccess = DateTime.Now;
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+            }
+            var courseMaterials = await _context.CourseMaterial
+                .Where(cm => cm.CourseId == id)
+                .ToListAsync();
+
+            ViewData["CourseMaterials"] = courseMaterials;
+            return View("Details", course);
+        }
+       
 
 
         public async Task<IActionResult> Details(int? id)
@@ -417,10 +417,6 @@ namespace BrainBoost.Controllers
                     ViewData["controller"] = "Billing";
                     ViewData["action"] = "CourseBilling";
                 }
-
-
-
-                return View(course);
 
             }
 

@@ -98,7 +98,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var material in (List<BrainBoost.Models.CourseMaterial>)ViewData["CourseMaterials"])
+            @foreach (var material in (IEnumerable<BrainBoost.Models.CourseMaterial>)ViewData["CourseMaterials"])
             {
                 <tr>
                     <td>@material.Name</td>
