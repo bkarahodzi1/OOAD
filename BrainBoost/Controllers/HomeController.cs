@@ -32,13 +32,36 @@ namespace BrainBoost.Controllers
             if (User.IsInRole("Professor"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
-                return View("HomeCourses");
             }
             else
             {
                 TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
-                return View();
             }
+            if (isAuthenticated)
+            {
+                // Dohvaćamo trenutno prijavljenog studenta preko korisničkog imena.
+                var currentStudent = await _context.Student
+                    .FirstOrDefaultAsync(s => s.Username == User.Identity.Name);
+
+                if (currentStudent != null)
+                {
+                    // Dohvaćamo posljednji pristupljeni kurs za trenutno prijavljenog studenta.
+                    var lastAccessedCourseProgress = await _context.CourseProgress
+                        .Include(cp => cp.Course)
+                        .Where(cp => cp.StudentId == currentStudent.UserId)
+                        .OrderByDescending(cp => cp.LastAccess)
+                        .FirstOrDefaultAsync();
+
+                    if (lastAccessedCourseProgress != null)
+                    {
+                        // Šaljemo ime kursa na View.
+                        ViewData["LastAccessedCourse"] = lastAccessedCourseProgress.Course.CourseName;
+                    }
+                }
+
+                return View("HomeCourses");
+            }
+            else return View();
         }
 
         //Home page - home courses
