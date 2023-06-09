@@ -1,5 +1,15 @@
 @model BrainBoost.Models.Student
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .button.active {
+        background-color: #4e73df;
+        color: white;
+    }
 
+    .button:hover {
+        background-color: #858796;
+    }
+</style>
 @{
     ViewData["Title"] = "Edit your personal information";
 }
@@ -42,7 +52,7 @@
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn button active" />
             </div>
         </form>
     </div>

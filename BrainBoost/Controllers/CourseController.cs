@@ -396,6 +396,7 @@ namespace BrainBoost.Controllers
                 .ToListAsync();
 
             ViewData["CourseMaterials"] = courseMaterials;
+            ViewData["NeedsPaying"] = "false";
             return View("Details", course);
         }
        
@@ -457,10 +458,17 @@ namespace BrainBoost.Controllers
                     ViewData["controller"] = "Billing";
                     ViewData["action"] = "CourseBilling";
                 }
+                if (courseProgress == null && course.Price == 0 || courseProgress!=null)
+                {
+                    ViewData["NeedsPaying"] = "false";
+                }
+                else
+                {
+                    ViewData["NeedsPaying"] = "true";
+                }
 
             }
 
-            
             var courseMaterials = await _context.CourseMaterial
                 .Where(cm => cm.CourseId == id)
                 .ToListAsync();

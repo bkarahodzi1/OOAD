@@ -4,6 +4,17 @@
     ViewData["Title"] = "Manage Email";
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .button.active {
+        background-color: #4e73df;
+        color: white;
+    }
+
+    .button:hover {
+        background-color: #858796;
+    }
+</style>
 
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
@@ -38,7 +49,7 @@
                 <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
             </div>
             <br />
-            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">Change email</button>
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn button active">Change email</button>
         </form>
     </div>
 </div>

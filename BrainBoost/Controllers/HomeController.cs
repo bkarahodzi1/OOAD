@@ -29,12 +29,16 @@ namespace BrainBoost.Controllers
         {
             bool isAuthenticated = User.Identity.IsAuthenticated;
             System.Diagnostics.Debug.WriteLine(isAuthenticated);
-            if (isAuthenticated)
+            if (User.IsInRole("Professor"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
                 return View("HomeCourses");
             }
-            else return View();
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+                return View();
+            }
         }
 
         //Home page - home courses

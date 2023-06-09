@@ -4,7 +4,17 @@
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .button.active {
+        background-color: #4e73df;
+        color: white;
+    }
 
+    .button:hover {
+        background-color: #858796;
+    }
+</style>
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
@@ -29,7 +39,7 @@
                 <span asp-validation-for="Input.NewUsername" class="text-danger"></span>
             </div>
             <br />
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <button id="update-profile-button" type="submit" class="btn button active">Save</button>
         </form>
     </div>
 </div>
