@@ -70,10 +70,12 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
+            [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters.")]
             [Display(Name = "First name")]
             public string FirstName { get; set; }
 
             [Required]
+            [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Last name can only contain letters.")]
             [Display(Name = "Last name")]
             public string LastName { get; set; }
 
@@ -82,6 +84,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account
 
             [Display(Name = "Date of birth")]
             [DataType(DataType.Date)]
+            [Range(typeof(DateTime), "1/1/1900", "12/31/2019", ErrorMessage = "Date of birth must be between 01/01/1900 and 01/01/2020.")]
             public DateTime BirthDate { get; set; }
         }
 
@@ -104,7 +107,8 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var imaUBazi = await _userManager.FindByEmailAsync(Input.Email);
-                if(imaUBazi == null)
+                var dupliUsername = await _userManager.FindByNameAsync(Input.Username);
+                if(imaUBazi == null && dupliUsername == null)
                 {
                     var user = new IdentityUser { UserName = Input.Username, Email = Input.Email };
                     var result = await _userManager.CreateAsync(user, Input.Password);
@@ -157,9 +161,13 @@ namespace BrainBoost.Areas.Identity.Pages.Account
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-                else
+                else if(imaUBazi != null)
                 {
                     TempData["EmailPostoji"] = "This email has already been taken.";
+                }
+                else
+                {
+                    TempData["EmailPostoji"] = "This username has already been taken.";
                 }
             }
 

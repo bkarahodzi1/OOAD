@@ -35,7 +35,8 @@ namespace BrainBoost.Controllers
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
             else
-            {  if(isAuthenticated)
+            {  
+                if(isAuthenticated)
                 TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
             if (isAuthenticated)
