@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BrainBoost.Models
 {
-    public class Course
+    public class Course : ICloneable
     {
         [Key]
         public int CourseId { get; set; }
@@ -43,5 +43,25 @@ namespace BrainBoost.Models
         public DateTime UpdatedAt { get; set; }
 
         public Course() { }
+
+        public object Clone()
+        {
+            Course clonedCourse = new Course
+            {
+                CourseId = this.CourseId,
+                ProfessorId = this.ProfessorId,
+                Professor = this.Professor,
+                CourseName = this.CourseName,
+                Description = this.Description,
+                Price = this.Price,
+                Currency = this.Currency,
+                CompletedCount = this.CompletedCount,
+                CompletedPercentage = this.CompletedPercentage,
+                CreatedAt = this.CreatedAt,
+                UpdatedAt = this.UpdatedAt
+            };
+
+            return clonedCourse;
+        }
     }
 }
