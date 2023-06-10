@@ -115,30 +115,23 @@ namespace BrainBoost.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         string combo = Request.Form["role"].ToString();
+                        Models.User u;
                         if (combo == "Student")
                         {
-                            Models.User u = new Models.Student();
-                            u.FirstName = Input.FirstName;
-                            u.LastName = Input.LastName;
-                            u.Email = Input.Email;
-                            u.BirthDate = Input.BirthDate;
-                            u.CreatedAt = DateTime.Now;
-                            u.IsVerified = true;
-                            u.Username = Input.Username;
-                            context.User.Add(u);
+                            u = new Models.Student();
                         }
                         else
                         {
-                            Models.User u = new Models.Professor();
-                            u.FirstName = Input.FirstName;
-                            u.LastName = Input.LastName;
-                            u.Email = Input.Email;
-                            u.BirthDate = Input.BirthDate;
-                            u.CreatedAt = DateTime.Now;
-                            u.IsVerified = true;
-                            u.Username = Input.Username;
-                            context.User.Add(u);
+                            u = new Models.Professor();
                         }
+                        u.FirstName = Input.FirstName;
+                        u.LastName = Input.LastName;
+                        u.Email = Input.Email;
+                        u.BirthDate = Input.BirthDate;
+                        u.CreatedAt = DateTime.Now;
+                        u.IsVerified = true;
+                        u.Username = Input.Username;
+                        context.User.Add(u);
                         context.SaveChanges();
 
                         var rola = await _userManager.FindByNameAsync(Input.Username);
