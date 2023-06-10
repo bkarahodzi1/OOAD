@@ -395,6 +395,7 @@ namespace BrainBoost.Controllers
                 .Where(cm => cm.CourseId == id)
                 .ToListAsync();
 
+            ViewData["isEnrolled"] = "true";
             ViewData["CourseMaterials"] = courseMaterials;
             ViewData["NeedsPaying"] = "false";
             return View("Details", course);
