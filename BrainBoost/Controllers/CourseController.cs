@@ -397,7 +397,6 @@ namespace BrainBoost.Controllers
 
             ViewData["isEnrolled"] = "true";
             ViewData["CourseMaterials"] = courseMaterials;
-            ViewData["NeedsPaying"] = "false";
             return View("Details", course);
         }
        
@@ -425,14 +424,13 @@ namespace BrainBoost.Controllers
             {
                 return NotFound();
             }
-            if (User.IsInRole("Student"))
-            {
                 var username = User.Identity.Name;
                 Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
                 var courseProgress = await _context.CourseProgress
                 .Include(cp => cp.Student)
                 .FirstOrDefaultAsync(cp => cp.CourseId == id && cp.StudentId == student.UserId);
-
+            if (User.IsInRole("Student"))
+            {
                 Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId && b.CourseId == id);
                 if (courseProgress == null && course.Price == 0)
                 {
@@ -456,21 +454,15 @@ namespace BrainBoost.Controllers
                     ViewData["controller"] = "Billing";
                     ViewData["action"] = "CourseBilling";
                 }
-                if (courseProgress == null && course.Price == 0 || courseProgress!=null)
-                {
-                    ViewData["NeedsPaying"] = "false";
-                }
-                else
-                {
-                    ViewData["NeedsPaying"] = "true";
-                }
+                
 
             }
 
             var courseMaterials = await _context.CourseMaterial
                 .Where(cm => cm.CourseId == id)
                 .ToListAsync();
-
+            var proxy = new Proxy();
+            proxy.CheckPayment(courseProgress, course, ViewData);
             ViewData["CourseMaterials"] = courseMaterials;
             return View(course);
         }
