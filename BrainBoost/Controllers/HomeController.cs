@@ -29,18 +29,16 @@ namespace BrainBoost.Controllers
         {
             bool isAuthenticated = User.Identity.IsAuthenticated;
             System.Diagnostics.Debug.WriteLine(isAuthenticated);
-            if (User.IsInRole("Professor"))
-            {
-                if(isAuthenticated)
-                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
-            }
-            else
-            {  
-                if(isAuthenticated)
-                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
-            }
             if (isAuthenticated)
             {
+                if (User.IsInRole("Professor"))
+                {
+                    TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+                }
+                else
+                {
+                    TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+                }
                 // Dohvaćamo trenutno prijavljenog studenta preko korisničkog imena.
                 var currentStudent = await _context.Student
                     .FirstOrDefaultAsync(s => s.Username == User.Identity.Name);
