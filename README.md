@@ -22,3 +22,6 @@ Kurseve postavljaju "profesori" koji dodaju lekcije i testove za iste u vidu kvi
 Oni također vide sve koji pohađaju njihov kurs.
 
 Admin ima mogućnost da prati sve korisnike (profesore i učenike) i upravlja radom platforme.
+
+## Link web aplikacije
+http://imranspahic-001-site1.atempurl.com/
