@@ -49,7 +49,6 @@ namespace BrainBoost.Models
 
         private IList<IObserver> _observers;
 
-
         public void RegisterObserver(IObserver observer)
         {
             _observers.Add(observer);
