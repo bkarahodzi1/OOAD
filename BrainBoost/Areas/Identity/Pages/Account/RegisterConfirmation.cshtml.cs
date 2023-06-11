@@ -52,6 +52,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                // Checking if the given input matches sent verification code
                 if (Input.VerificationCode == null)
                 {
                     TempData["ErrorMessage"] = "Invalid verification code.";

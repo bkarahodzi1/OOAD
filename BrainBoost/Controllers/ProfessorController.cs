@@ -71,6 +71,7 @@ namespace BrainBoost.Controllers
         // GET: Professor/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            // Kljuc represents id that should be sent to view
             TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             if (id == null || _context.Professor == null)
             {
@@ -96,6 +97,7 @@ namespace BrainBoost.Controllers
             {
                 try
                 {
+                    // Validations
                     var profa = await _context.Professor.FindAsync(id);
                     if (profa.FirstName == professor.FirstName && profa.LastName == professor.LastName && profa.BirthDate == professor.BirthDate)
                     {
@@ -109,6 +111,7 @@ namespace BrainBoost.Controllers
                         TempData["Datum"] = "You must be at least 6 years old to register!";
                         return View(professor);
                     }
+                    // Making changes on model that is already in database
                     profa.FirstName = professor.FirstName;
                     profa.LastName = professor.LastName;
                     profa.BirthDate = professor.BirthDate;

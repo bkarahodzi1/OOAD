@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Threading;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BrainBoost.Controllers
 {
@@ -298,6 +299,14 @@ namespace BrainBoost.Controllers
         }
         public IActionResult Search(string searchString)
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             if (string.IsNullOrWhiteSpace(searchString))
             {
                 var courses = _context.Course.Include(c => c.Professor).ToList();
@@ -498,7 +507,6 @@ namespace BrainBoost.Controllers
                 proxy.CheckPayment(courseProgress, course, ViewData);
            
             }
-
              ViewData["CourseMaterials"] = courseMaterials;
             return View(course);
         }
@@ -533,6 +541,7 @@ namespace BrainBoost.Controllers
                     }
                     catch(SemaphoreFullException semaphoreFullException)
                     {
+                        // Handling exception because of big number of async calls, problem solved with delay method
                         await Task.Delay(5000);
                         await _emailSender.SendEmailAsync(
                         student.Email,
@@ -558,9 +567,57 @@ namespace BrainBoost.Controllers
         public async Task<IActionResult> CourseMaterial(int? id)
         {
             var courseMaterial = await _context.CourseMaterial
-                .FirstOrDefaultAsync(m => m.CourseId == id);
+                .FirstOrDefaultAsync(m => m.CourseMaterialId == id);
             return View(courseMaterial);
         }
+        public async Task<IActionResult> AddMaterial(int? id)
+        {
+            ViewData["AddedNew"] = "false";
+            ViewData["Error"] = "false";
+            ViewData["id"] = id;
+            return View();
+        }
+        public async Task<IActionResult> AddedMaterial(int id, string name, string description, string content, string file, int fileType)
+        {
+            if(name.IsNullOrEmpty() || name.IsNullOrEmpty() || description.IsNullOrEmpty() || content.IsNullOrEmpty() || file.IsNullOrEmpty() || fileType<0 || fileType>4)
+            {
+                ViewData["Error"] = "true";
+                ViewData["AddedNew"] = "false";
+                ViewData["id"] = id;
+                return View("AddMaterial");
+            }
+            var newCourseMaterial = new CourseMaterial
+            {
+                CourseId = id,
+                Name = name,
+                Description = description,
+                Content = content,
+                File = file,
+                FileType = (FileType)Enum.Parse(typeof(FileType), fileType.ToString()),
+                ViewCount = 0,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+            _context.CourseMaterial.Add(newCourseMaterial);
+            await _context.SaveChangesAsync();
+            ViewData["AddedNew"] = "true";
+            ViewData["Error"] = "false";
+            ViewData["id"] = id;
+            return View("AddMaterial");
+        }
+        public async Task<IActionResult> DeleteMaterial(int? id)
+        {
+            var courseMaterial = await _context.CourseMaterial
+                .FirstOrDefaultAsync(cp => cp.CourseMaterialId == id);
+            if (courseMaterial != null)
+            {
+                // Remove the entity from the DbSet
+                _context.CourseMaterial.Remove(courseMaterial);
 
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Details", "Course", new { id = courseMaterial.CourseId });
+        }
     }
 }

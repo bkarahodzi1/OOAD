@@ -93,6 +93,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
+        // Random number generator for verification codes
         private int generateCode()
         {
             Random random = new Random();
@@ -101,6 +102,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            // Birth date validation
             int age = 0;
             age = DateTime.Now.Subtract(Input.BirthDate).Days;
             age = age / 365;
@@ -113,14 +115,18 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                // Check if there is already created user with given username or email
                 var imaUBazi = await _userManager.FindByEmailAsync(Input.Email);
                 var dupliUsername = await _userManager.FindByNameAsync(Input.Username);
                 if(imaUBazi == null && dupliUsername == null)
                 {
+                    // Creating new account
                     var user = new IdentityUser { UserName = Input.Username, Email = Input.Email };
                     var result = await _userManager.CreateAsync(user, Input.Password);
                     if (result.Succeeded)
                     {
+                        // Creating a user in our own table in database, instead of created user in AspNetUser table
+                        // Because of our business logic, initialization of atributes depends on role
                         string combo = Request.Form["role"].ToString();
                         Models.User u;
                         if (combo == "Student")
@@ -141,12 +147,14 @@ namespace BrainBoost.Areas.Identity.Pages.Account
                         context.User.Add(u);
                         context.SaveChanges();
 
+                        // Connecting our new user with his role in AspNetUserRoles table
                         var rola = await _userManager.FindByNameAsync(Input.Username);
                         await _userManager.AddToRoleAsync(rola, combo);
 
 
                         _logger.LogInformation("User created a new account with password.");
-
+                        
+                        // Generating and sending verification code via email
                         int code = generateCode();
 
                         string body = "Dear User,<br/><br/>Thank you for registering on our platform. To complete the registration process, we kindly ask you to confirm your email address.<br/><br/>Your verification code is: " + code + "<br/><br/>If you did not initiate this registration, please disregard this message.<br/><br/>Thank you for your cooperation.<br/><br/>Best regards,<br/>Your Support Team";

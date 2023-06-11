@@ -37,6 +37,8 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             public string Email { get; set; }
         }
 
+        // Random string generator for generating new password that will be sent via email
+        // Password must contain one lower case letter, one upper case letter and one number
         private static string GenerateRandomString()
         {
             const string lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
@@ -74,6 +76,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account
                 // For more information on how to enable account confirmation and password reset please 
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 
+                // Generating new password and sending to user's email
                 string novaSifra = GenerateRandomString();
 
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);

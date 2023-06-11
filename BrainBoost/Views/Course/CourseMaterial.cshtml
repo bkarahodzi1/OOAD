@@ -1,5 +1,24 @@
 ﻿@model BrainBoost.Models.CourseMaterial
+<style>
+    .button.active {
+        background-color: #4e73df;
+        color: white;
+    }
 
+    .button.active2 {
+        background-color: #4e73df;
+        color: white;
+        width: 100%;
+    }
+
+    .button:hover {
+        background-color: #858796;
+    }
+
+    .clickable-row {
+        cursor: pointer;
+    }
+</style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <div class="course-material">
     <h2>@Html.DisplayFor(model => model.Name)</h2>
@@ -35,6 +54,18 @@
         <strong>Updated:</strong>
         <p>@Html.DisplayFor(model => model.UpdatedAt)</p>
     </div>
-    <a  asp-controller="Quiz" asp-action="Quiz" asp-route-courseMaterialId="@Model.CourseMaterialId" class="btn btn-primary" style="float:left;">Quiz</a>
+    @if (User.IsInRole("Professor"))
+    {
+        <form method="post" asp-action="DeleteMaterial" asp-controller="Course" onsubmit="return showConfirmationPopup()">
+            <input type="hidden" name="id" value="@Model.CourseMaterialId" />
+            <button type="submit" class="btn button active">Delete Material</button>
+        </form>
+    }
+
+    <script>
+        function showConfirmationPopup() {
+            return confirm("Are you sure you want to delete this material?");
+        }
+    </script>
 
 </div>
