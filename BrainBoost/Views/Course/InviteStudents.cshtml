@@ -3,34 +3,53 @@
     var course = ViewBag.course;
 
 }
-<form id="selectedStudents" method="post">
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="student-list">
-        <h1 class="text-center">Successfully created course @course.CourseName </h1>
-        <h2 class="text-center">You can invite following students:</h2>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Student Name</th>
-                    <th>Select</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.Count; i++)
-                {
-                    <tr>
-                        <td>@(Model[i].FirstName + " " + Model[i].LastName)</td>
-                        <td>
-                            <input type="checkbox" name="selectedStudents" value="@Model[i].UserId" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-            <div class="text-center">
-                <input type="hidden" name="courseId" value="@course.CourseId" />
-                <button type="submit" asp-controller="Course" asp-action="SelectedStudents"  class="btn button active2">Save</button>
-            </div>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .button.active {
+        background-color: #4e73df;
+        color: white;
+    }
+
+    .button:hover {
+        background-color: #858796;
+    }
+</style>
+
+<div style="margin-top: 20px" class="text-center">
+
+    <h1>Invite students</h1>
+    <div style="margin: auto; width: 600px" class="alert alert-info" role="alert">
+        You can select and invite students to your course @course.CourseName. They will receive an invitation email.
     </div>
 </div>
+
+<form style="margin: 30px 200px 0px 200px" id="selectedStudents" method="post">
+    <div class="container justify-content-center align-items-center vh-100">
+        <div class="student-list">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td>@(Model[i].FirstName + " " + Model[i].LastName)</td>
+                            <td>
+                                <input type="checkbox" name="selectedStudents" value="@Model[i].UserId" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div style="margin-top: 30px" class="text-center">
+                <input type="hidden" name="courseId" value="@course.CourseId" />
+                <button type="submit" asp-controller="Course" asp-action="SelectedStudents" class="w-100 btn button active">Save</button>
+            </div>
+        </div>
+    </div>
 </form>

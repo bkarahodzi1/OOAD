@@ -77,6 +77,14 @@ namespace BrainBoost.Controllers
                     Professor professor = await _context.Professor.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
                     course.CreatedAt = DateTime.Now;
                     course.UpdatedAt = DateTime.Now;
+                    if(course.Price == null)
+                    {
+                        course.Price = 0;
+                    }
+                    if(course.Currency == null)
+                    {
+                        course.Currency = "KM";
+                    }
                     course.Professor = professor;
                     course.ProfessorId = professor.UserId;
                     //saving course to database

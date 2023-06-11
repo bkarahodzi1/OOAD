@@ -71,7 +71,14 @@
                     <tr class="clickable-row" onclick="location.href='@Url.Action("Details", "Course", new { id = item.CourseId })'">
                         <td>@Html.DisplayFor(modelItem => item.CourseName)</td>
                         <td>@Html.DisplayFor(modelItem => item.Professor.FirstName) @Html.DisplayFor(modelItem => item.Professor.LastName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Price) @Html.DisplayFor(modelItem => item.Currency)</td>
+                        @if (item.Price == 0)
+                        {
+                            <td style="color: green">Free</td>
+                        }
+                        else
+                        {
+                            <td>@Html.DisplayFor(modelItem => item.Price) @Html.DisplayFor(modelItem => item.Currency)</td>
+                        }
                     </tr>
                 }
 
