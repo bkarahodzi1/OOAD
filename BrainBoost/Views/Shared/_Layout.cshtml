@@ -101,7 +101,7 @@
                 <!-- Nav Item - Kreiraj kurs -->
                 @if (User.IsInRole("Professor"))
                 {
-                    <li class="nav-item @Html.ActiveClass("Course", "Create")">
+                    <li class="nav-item @Html.ActiveClass("Course", "Create") @Html.ActiveClass("Course", "InviteStudents")">
                         <a class="nav-link" asp-area="" asp-controller="Course" asp-action="Create">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Create course</span>

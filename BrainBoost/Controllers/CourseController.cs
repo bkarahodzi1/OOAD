@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Threading;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BrainBoost.Controllers
@@ -78,6 +79,14 @@ namespace BrainBoost.Controllers
                     Professor professor = await _context.Professor.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
                     course.CreatedAt = DateTime.Now;
                     course.UpdatedAt = DateTime.Now;
+                    if(course.Price == null)
+                    {
+                        course.Price = 0;
+                    }
+                    if(course.Currency == null)
+                    {
+                        course.Currency = "KM";
+                    }
                     course.Professor = professor;
                     course.ProfessorId = professor.UserId;
                     //saving course to database
@@ -290,6 +299,14 @@ namespace BrainBoost.Controllers
         }
         public IActionResult Search(string searchString)
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             if (string.IsNullOrWhiteSpace(searchString))
             {
                 var courses = _context.Course.Include(c => c.Professor).ToList();
@@ -515,10 +532,22 @@ namespace BrainBoost.Controllers
                                 "</body></html>";
                 foreach (Student student in students)
                 {
-                    await _emailSender.SendEmailAsync(
-                    student.Email,
-                    "Invitation for a new course",
-                    body);
+                    try
+                    {
+                        await _emailSender.SendEmailAsync(
+                        student.Email,
+                        "Invitation for a new course",
+                        body);
+                    }
+                    catch(SemaphoreFullException semaphoreFullException)
+                    {
+                        // Handling exception because of big number of async calls, problem solved with delay method
+                        await Task.Delay(5000);
+                        await _emailSender.SendEmailAsync(
+                        student.Email,
+                        "Invitation for a new course",
+                        body);
+                    }
                 }
             }
 

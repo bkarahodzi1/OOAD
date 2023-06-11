@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 
 namespace BrainBoost.Models
 {
@@ -23,11 +24,11 @@ namespace BrainBoost.Models
         public string Description { get; set; }
 
         [Display(Name = "Price")]
-        [Required(ErrorMessage = "Price is required.")]
+        [DefaultValue(0)]
         public double? Price { get; set; }
 
         [Display(Name = "Currency")]
-        [Required(ErrorMessage = "Currency is required.")]
+        [DefaultValue("KM")]
         public string Currency { get; set; }
 
         [Display(Name = "Completed count")]

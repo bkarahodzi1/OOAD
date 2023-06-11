@@ -102,10 +102,11 @@ namespace BrainBoost.Areas.Identity.Pages.Account.Manage
             }
 
             var email = await _userManager.GetEmailAsync(user);
-
+            // Validation that checks is there already created user in our database with this email
             var postojiVecEmail = await _userManager.FindByEmailAsync(Input.NewEmail);
             if (Input.NewEmail != email && postojiVecEmail == null)
             {
+                // Informing the user via old email adress that the email has been changed
                 await _emailSender.SendEmailAsync(
                     email,
                     "Changing Email Adress",
@@ -120,7 +121,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account.Manage
 
             else
             {
-                // Postoji vec taj email koji se zeli postaviti
+                // Alert message
                 TempData["EmailPostoji"] = "This email has already been taken.";
             }
             return RedirectToPage();

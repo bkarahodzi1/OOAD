@@ -87,7 +87,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
-
+            // Validation that checks is there already created user in our database with this username
             var postojiVecUsername = await _userManager.FindByNameAsync(Input.NewUsername);
 
             if (Input.NewUsername != user.UserName && postojiVecUsername == null)
@@ -101,7 +101,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account.Manage
             }
             else
             {
-                // Postoji vec user sa tim usernameom
+                // Alert message
                 TempData["UsernamePostoji"] = "This username has already been taken.";
                 return RedirectToPage();
             }

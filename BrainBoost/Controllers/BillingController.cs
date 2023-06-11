@@ -84,7 +84,7 @@ namespace BrainBoost.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string cardNumber, int courseid, int cvv)
+        public async Task<IActionResult> Create(int expiryMonth,int expiryYear,string cardNumber, int courseid, int cvv)
 		{
             var username = User.Identity.Name;
 			Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
@@ -119,7 +119,21 @@ namespace BrainBoost.Controllers
 
                     ModelState.AddModelError(nameof(student.AccountBalance), "Not enough balance in your account.");
         }
-    }
+        if (billingCard.ExpiryMonth != expiryMonth)
+        {
+            // Add validation error for account balance
+            TempData["MonthError"] = "Wrong expiry month.";
+
+            ModelState.AddModelError(nameof(student.AccountBalance), "Not enough balance in your account.");
+        }
+        if (billingCard.ExpiryYear != expiryYear)
+        {
+            // Add validation error for account balance
+            TempData["YearError"] = "Wrong expiry year.";
+
+            ModelState.AddModelError(nameof(student.AccountBalance), "Not enough balance in your account.");
+        }
+            }
 
     if (!ModelState.IsValid)
     {
@@ -150,6 +164,8 @@ namespace BrainBoost.Controllers
                 //saving to database
                 _context.Add(courseProgress);
             _context.Add(billing);
+                student.AccountBalance = (double)(student.AccountBalance - course.Price);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Course", new { id = courseid });
 

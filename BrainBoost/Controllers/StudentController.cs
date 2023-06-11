@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Text.RegularExpressions;
 
 namespace BrainBoost.Controllers
 {
@@ -71,6 +72,7 @@ namespace BrainBoost.Controllers
         // GET: Student/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            // Kljuc represents id that should be sent to view
             TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             if (id == null || _context.Student == null)
             {
@@ -96,12 +98,26 @@ namespace BrainBoost.Controllers
             {
                 try
                 {
+                    // Validations
                     if (student.AccountBalance <= 0 || student.AccountBalance > 10000)
                     {
                         TempData["Pare"] = "Entered amount is over limitation.";
                         return View(student);
                     }
                     var stu = await _context.Student.FindAsync(id);
+                    if (stu.FirstName == student.FirstName && stu.LastName == student.LastName && stu.BirthDate == student.BirthDate && stu.AccountBalance == student.AccountBalance)
+                    {
+                        return View(student);
+                    }
+                    int age = 0;
+                    age = DateTime.Now.Subtract(student.BirthDate).Days;
+                    age = age / 365;
+                    if (age < 6)
+                    {
+                        TempData["Pare"] = "You must be at least 6 years old to register!";
+                        return View(student);
+                    }
+                    // Making changes on model that is already in database
                     stu.FirstName = student.FirstName;
                     stu.LastName = student.LastName;
                     stu.BirthDate = student.BirthDate;

@@ -44,6 +44,12 @@
                 </select>
                 <span asp-validation-for="ExpiryMonth" class="text-danger"></span>
             </div>
+            @if (TempData["MonthError"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["MonthError"]
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="ExpiryYear" class="control-label"></label>
                 <select asp-for="ExpiryYear" class="form-control" required>
@@ -54,7 +60,12 @@
                 </select>
                 <span asp-validation-for="ExpiryYear" class="text-danger"></span>
             </div>
-
+            @if (TempData["YearError"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["YearError"]
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="CVV" class="control-label"></label>
                 <input asp-for="CVV" class="form-control" required />
