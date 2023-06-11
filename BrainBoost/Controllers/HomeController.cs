@@ -31,13 +31,20 @@ namespace BrainBoost.Controllers
             System.Diagnostics.Debug.WriteLine(isAuthenticated);
             if (isAuthenticated)
             {
-                if (User.IsInRole("Professor"))
+                Console.WriteLine("User logged in {0}", User.Identity.Name);
+                if (User.IsInRole("Professor") || User.IsInRole("Admin"))
                 {
                     TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
                 }
-                else
+                else if(User.IsInRole("Student"))
                 {
                     TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+                }
+
+                if(User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index", "Student");
+                    
                 }
                 // Dohvaćamo trenutno prijavljenog studenta preko korisničkog imena.
                 var currentStudent = await _context.Student

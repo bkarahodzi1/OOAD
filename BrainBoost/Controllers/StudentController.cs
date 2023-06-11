@@ -170,7 +170,9 @@ namespace BrainBoost.Controllers
             var student = await _context.Student.FindAsync(id);
             if (student != null)
             {
+                var user = await _userManager.FindByNameAsync(student.Username);
                 _context.Student.Remove(student);
+                await _userManager.DeleteAsync(user);
             }
             
             await _context.SaveChangesAsync();

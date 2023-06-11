@@ -137,6 +137,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account
                         {
                             u = new Models.Professor();
                         }
+
                         u.FirstName = Input.FirstName;
                         u.LastName = Input.LastName;
                         u.Email = Input.Email;

@@ -69,7 +69,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            if (User.IsInRole("Professor"))
+            if (User.IsInRole("Professor") || User.IsInRole("Admin"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
