@@ -2,6 +2,8 @@
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
+
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
     .navi {
@@ -13,10 +15,11 @@
         display: block;
         padding: 0.5rem 1rem;
     }
-    .navi.active{
+
+        .navi.active {
             background-color: #4e73df;
             color: white;
-    }
+        }
 </style>
 <ul class="nav nav-pills flex-column">
     <li class="nav-item"><a class="navi  @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>

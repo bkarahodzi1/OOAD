@@ -80,7 +80,7 @@ namespace BrainBoost.Controllers
 
             ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId", course.ProfessorId);
 
-                return RedirectToAction(nameof(Details), new { id = course.CourseId });
+                return RedirectToAction(nameof(InviteStudents), new { id = course.CourseId });
             }
             else { return View(); }
            
@@ -426,11 +426,14 @@ namespace BrainBoost.Controllers
             }
                 var username = User.Identity.Name;
                 Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
+                var courseMaterials = await _context.CourseMaterial
+                .Where(cm => cm.CourseId == id)
+                .ToListAsync();
+            if (User.IsInRole("Student"))
+            {
                 var courseProgress = await _context.CourseProgress
                 .Include(cp => cp.Student)
                 .FirstOrDefaultAsync(cp => cp.CourseId == id && cp.StudentId == student.UserId);
-            if (User.IsInRole("Student"))
-            {
                 Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId && b.CourseId == id);
                 if (courseProgress == null && course.Price == 0)
                 {
@@ -456,15 +459,35 @@ namespace BrainBoost.Controllers
                 }
                 
 
-            }
-
-            var courseMaterials = await _context.CourseMaterial
-                .Where(cm => cm.CourseId == id)
-                .ToListAsync();
             var proxy = new Proxy();
             proxy.CheckPayment(courseProgress, course, ViewData);
-            ViewData["CourseMaterials"] = courseMaterials;
+           
+            }
+
+             ViewData["CourseMaterials"] = courseMaterials;
             return View(course);
+        }
+
+        [HttpPost]
+        public IActionResult SelectedStudents(List<int> selectedStudents, int? courseId)
+        {
+            // Process the selected students
+            List<Student> students = _context.Student.Where(s => selectedStudents.Contains(s.UserId)).ToList();
+
+
+            if (students.Count > 0) { 
+            //do something with selected students, eg. Send them emails.
+            }
+
+
+            return RedirectToAction("Details", new { id = courseId });
+        }
+        public IActionResult InviteStudents(int? id)
+        {
+            ViewBag.course = _context.Course.FirstOrDefault(c => c.CourseId == id);
+
+            List<Student> students = _context.Student.ToList();
+            return View(students);
         }
 
 
