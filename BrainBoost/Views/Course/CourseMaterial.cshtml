@@ -54,6 +54,11 @@
         <strong>Updated:</strong>
         <p>@Html.DisplayFor(model => model.UpdatedAt)</p>
     </div>
+    @if (User.IsInRole("Student"))
+    {
+            <a asp-controller="Quiz" asp-action="Quiz" asp-route-courseMaterialId="@Model.CourseMaterialId" class="btn btn-primary" style="float:left;">Quiz</a>
+
+    }
     @if (User.IsInRole("Professor"))
     {
         <form method="post" asp-action="DeleteMaterial" asp-controller="Course" onsubmit="return showConfirmationPopup()">
