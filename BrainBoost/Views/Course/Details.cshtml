@@ -25,6 +25,10 @@
     .button:hover{
         background-color: #858796;
     }
+
+    .clickable-row {
+        cursor: pointer;
+    }
 </style>
 <h1>Details</h1>
 
@@ -84,20 +88,23 @@
     {
         <table class="table table-striped table-bordered">
         <colgroup>
-            <col style="width: 80%">
+            <col style="width: 20%">
+            <col style="width: 60%">
             <col style="width: 20%">
         </colgroup>
         <thead class="thead-dark">
             <tr>
                 <th>Course Materials</th>
+                <th>Content</th>
                 <th>Last Updated</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var material in (IEnumerable<BrainBoost.Models.CourseMaterial>)ViewData["CourseMaterials"])
             {
-                <tr>
+                <tr class="clickable-row" onclick="location.href='@Url.Action("CourseMaterial", "Course", new { id = material.CourseId })'">
                     <td>@material.Name</td>
+                    <td>@material.Content</td>
                     <td>@material.UpdatedAt</td>
                 </tr>
             }

@@ -473,8 +473,8 @@ namespace BrainBoost.Controllers
                 }
                 
 
-            var proxy = new Proxy();
-            proxy.CheckPayment(courseProgress, course, ViewData);
+                var proxy = new Proxy();
+                proxy.CheckPayment(courseProgress, course, ViewData);
            
             }
 
@@ -506,6 +506,12 @@ namespace BrainBoost.Controllers
             return View(students);
         }
 
+        public async Task<IActionResult> CourseMaterial(int? id)
+        {
+            var courseMaterial = await _context.CourseMaterial
+                .FirstOrDefaultAsync(m => m.CourseId == id);
+            return View(courseMaterial);
+        }
 
     }
 }
