@@ -1,4 +1,9 @@
-﻿<div class="d-flex justify-content-end mt-2 mr-2" style="margin-bottom: -100px;">
+﻿
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="d-flex justify-content-end mt-2 mr-2" style="margin-bottom: -100px;">
     @if (ViewData["LastAccessedCourse"] != null)
     {
         <p>Last accessed course: @ViewData["LastAccessedCourse"]</p>
@@ -35,11 +40,8 @@
 
 <div class="text-center mt-5">
     <p>Contact us: <a href="mailto:brainboostmvc@gmail.com">brainboostmvc@gmail.com</a></p>
-</div
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
+</div>
+<div class="alert alert-success">
+    @TempData["SuccessMessage"]
+</div>
 }
