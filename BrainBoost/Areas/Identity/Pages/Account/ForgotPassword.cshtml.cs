@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Linq;
 
 namespace BrainBoost.Areas.Identity.Pages.Account
 {
@@ -18,6 +19,7 @@ namespace BrainBoost.Areas.Identity.Pages.Account
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private static Random random = new Random();
 
         public ForgotPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender)
         {
@@ -35,6 +37,29 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             public string Email { get; set; }
         }
 
+        private static string GenerateRandomString()
+        {
+            const string lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+            const string uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string numericChars = "0123456789";
+
+            var random = new Random();
+
+            var randomString = new StringBuilder();
+            randomString.Append(lowercaseChars[random.Next(lowercaseChars.Length)]);
+            randomString.Append(uppercaseChars[random.Next(uppercaseChars.Length)]);
+            randomString.Append(numericChars[random.Next(numericChars.Length)]);
+
+            const string allChars = lowercaseChars + uppercaseChars + numericChars;
+
+            for (int i = 3; i < 8; i++)
+            {
+                randomString.Append(allChars[random.Next(allChars.Length)]);
+            }
+
+            return randomString.ToString();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
@@ -48,18 +73,25 @@ namespace BrainBoost.Areas.Identity.Pages.Account
 
                 // For more information on how to enable account confirmation and password reset please 
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
-                    "/Account/ResetPassword",
-                    pageHandler: null,
-                    values: new { area = "Identity", code },
-                    protocol: Request.Scheme);
+                
+                string novaSifra = GenerateRandomString();
 
-                await _emailSender.SendEmailAsync(
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token, novaSifra);
+
+                if(result.Succeeded)
+                {
+                    string body = $@"<html>
+                            <body>
+                                <p>Dear User,</p>
+                                <p>This is to inform you that your password has been successfully reset in our system. Please take note of your new password:</p>
+                                <p>Newly generated password: " + novaSifra + "</p> <p>After logging into the system, we recommend changing your password through your user profile.</p><p>Thank you for using our system.</p><p>Best regards,</p><p>Support Team</p></body></html>";
+                    await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Password Reset Notification",
+                    body);
+                }
+                
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

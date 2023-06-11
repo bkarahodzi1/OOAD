@@ -25,6 +25,14 @@ namespace BrainBoost.Controllers
         ///GET: Billing/CourseBilling
         public async Task<IActionResult> CourseBilling(int id)
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             ViewData["id"] = id;
             ViewBag.course=_context.Course.FirstOrDefault(c=>c.CourseId==id);
             //returns billing page for selected course
@@ -78,7 +86,7 @@ namespace BrainBoost.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string cardNumber, int courseid, int cvv)
 		{
-			var username = User.Identity.Name;
+            var username = User.Identity.Name;
 			Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
             Course course =await _context.Course.FirstOrDefaultAsync(c=>c.CourseId == courseid);
             Billing billing = new Billing();

@@ -1,0 +1,38 @@
+﻿@model BrainBoost.Models.CourseMaterial
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<div class="course-material">
+    <h2>@Html.DisplayFor(model => model.Name)</h2>
+
+    <div class="description">
+        <strong>Description:</strong>
+        <p>@Html.DisplayFor(model => model.Description)</p>
+    </div>
+
+    <div class="content">
+        <strong>Content:</strong>
+        <p>@Html.DisplayFor(model => model.Content)</p>
+    </div>
+
+    <div class="file-info">
+        <strong>File:</strong>
+        <p>
+            <a href="@Model.File">
+                link
+            </a>
+            (@Html.DisplayFor(model => model.FileType))
+        </p>
+    </div>
+
+    <div class="view-count">
+        <strong>Views:</strong>
+        <p>@Html.DisplayFor(model => model.ViewCount)</p>
+    </div>
+
+    <div class="timestamps">
+        <strong>Created:</strong>
+        <p>@Html.DisplayFor(model => model.CreatedAt)</p>
+        <strong>Updated:</strong>
+        <p>@Html.DisplayFor(model => model.UpdatedAt)</p>
+    </div>
+</div>
