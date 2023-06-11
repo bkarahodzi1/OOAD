@@ -6,9 +6,9 @@
 
 <form asp-action="SubmitRefundRequest" method="post">
     <div class="form-group">
-        <label for="reason">Koji je razlog za refund?</label>
+        <label for="reason">What is the reason for refund?</label>
         <textarea class="form-control" id="reason" name="reason" required></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Potvrdi</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
     @Html.AntiForgeryToken()
 </form>

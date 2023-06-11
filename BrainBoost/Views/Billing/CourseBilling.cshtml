@@ -49,6 +49,12 @@
                 <input asp-for="CVV" class="form-control" required />
                 <span asp-validation-for="CVV" class="text-danger"></span>
             </div>
+            @if (TempData["CVVError"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["CVVError"]
+                </div>
+            }
 
 
             <div class="form-group">
@@ -56,11 +62,23 @@
                 <input asp-for="CardNumber" class="form-control" required />
                 <span asp-validation-for="CardNumber" class="text-danger"></span>
             </div>
+            @if (TempData["CardError"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["CardError"]
+                </div>
+            }
 
             <div class="form-group">
                 <label class="control-label">Amount to be Paid:</label>
                 <label id="amountLabel" class="form-control-label">@priceText</label>
             </div>
+            @if (TempData["BalanceError"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["BalanceError"]
+                </div>
+            }
 			<button type="submit" class="btn btn-primary" style="float:right;">Pay</button>
 
 		</form><!--asp-route-courseid=@course.CourseId -->
