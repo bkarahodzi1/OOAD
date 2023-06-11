@@ -257,5 +257,13 @@ namespace BrainBoost.Controllers
         {
             return View();
         }
+
+        ///GET: CourseProgress/CourseStatistics/1
+        public async Task<IActionResult> CourseStatistics(int? id)
+        {
+            var course = await _context.Course
+                        .FirstOrDefaultAsync(m => m.CourseId == id);
+            return View(course);
+        }
     }
 }

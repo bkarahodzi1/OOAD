@@ -2,7 +2,7 @@
 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Statistics";
 }
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 @if (Model.Count() == 0)
@@ -20,7 +20,7 @@ else
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Course)
+                        @Html.DisplayNameFor(model => model.Course)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.LastAccess)
@@ -39,7 +39,10 @@ else
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Course.CourseName)
+                        <a asp-area="" asp-controller="CourseProgress" asp-action="CourseStatistics" asp-route-id="@item.Course.CourseId">
+                            @Html.DisplayFor(modelItem => item.Course.CourseName)
+                        </a>
+                        
                     </td>
                     @if (item.LastAccess == null)
                     {

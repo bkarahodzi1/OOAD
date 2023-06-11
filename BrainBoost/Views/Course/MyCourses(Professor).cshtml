@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<BrainBoost.Models.Course>
+
+@{
+    ViewData["Title"] = "My courses";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,41 +50,41 @@
         }
     </style>
 </head>
-    <h1>My Courses</h1>
-    <table class="table table-striped table-bordered">
-        <colgroup>
-            <col style="width: 30%">
-            <col style="width: 17.5%">
-            <col style="width: 17.5%">
-            <col style="width: 17.5%">
-            <col style="width: 17.5%">
-        </colgroup>
-        <thead class="thead-dark">
-            <tr>
-                <th>Course Name</th>
-                <th>Price</th>
-                <th>Students passed</th>
-                <th>Passing percentage</th>
-                <th>Last update</th>
-            </tr>
-        </thead>
-        <tbody>
+<h1>My Courses</h1>
+<table class="table table-striped table-bordered">
+    <colgroup>
+        <col style="width: 30%">
+        <col style="width: 17.5%">
+        <col style="width: 17.5%">
+        <col style="width: 17.5%">
+        <col style="width: 17.5%">
+    </colgroup>
+    <thead class="thead-dark">
+        <tr>
+            <th>Course Name</th>
+            <th>Price</th>
+            <th>Students passed</th>
+            <th>Passing percentage</th>
+            <th>Last update</th>
+        </tr>
+    </thead>
+    <tbody>
 
-            @foreach (var item in Model)
-            {
-                <tr class="clickable-row" onclick="location.href='@Url.Action("DetailsForMyCourses", "Course", new { id = item.CourseId })'">
-                    <td>@Html.DisplayFor(modelItem => item.CourseName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Price) @Html.DisplayFor(modelItem => item.Currency)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CompletedCount)</td>
-                    <td>
-                        <div class="progress-bar">
-                            <div class="progress-bar-fill" style="width: @(item.CompletedPercentage*100)%"></div>
-                        </div>
-                    </td>
-                    <td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        @foreach (var item in Model)
+        {
+            <tr class="clickable-row" onclick="location.href='@Url.Action("DetailsForMyCourses", "Course", new { id = item.CourseId })'">
+                <td>@Html.DisplayFor(modelItem => item.CourseName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price) @Html.DisplayFor(modelItem => item.Currency)</td>
+                <td>@Html.DisplayFor(modelItem => item.CompletedCount)</td>
+                <td>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: @(item.CompletedPercentage*100)%"></div>
+                    </div>
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>
+            </tr>
+        }
+    </tbody>
+</table>
 </html>
 

@@ -1,0 +1,25 @@
+﻿@model BrainBoost.Models.Course
+@{
+    ViewData["Title"] = "Course statistics";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.CourseName)
+            </td>
+        </tr>
+    </tbody>
+</table>
+
