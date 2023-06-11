@@ -27,6 +27,7 @@ namespace BrainBoost.Controllers
         {
             ViewData["id"] = id;
             ViewBag.course=_context.Course.FirstOrDefault(c=>c.CourseId==id);
+            //returns billing page for selected course
 
          return View();
         }
@@ -109,12 +110,12 @@ namespace BrainBoost.Controllers
 
     if (!ModelState.IsValid)
     {
-                // Vrati na isti view samo ne pokazuje gresku
+                
                 return RedirectToAction("CourseBilling", "Billing", new { id = courseid });
             }
             if (ModelState.IsValid)
             {
-               
+               //creating billing for student and chosen course
                 billing.BillingCard = billingCard;
                 billing.IsPurchaseSuccessful = true;
                 billing.BillingCardId = billingCard.BillingCardId;
@@ -123,6 +124,7 @@ namespace BrainBoost.Controllers
                 billing.Course = course;
                 billing.CourseId=courseid;
 
+                //create course progress and set it to 0
                 CourseProgress courseProgress = new CourseProgress();
                 courseProgress.StudentId = student.UserId;
                 courseProgress.Course = course;
@@ -132,18 +134,19 @@ namespace BrainBoost.Controllers
                 courseProgress.IsCompleted = false;
                 courseProgress.LastAccess= DateTime.Now;
 
+                //saving to database
                 _context.Add(courseProgress);
-
             _context.Add(billing);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Course", new { id = courseid });
 
             }
+
+            //Default redirect
             ViewData["BillingCardId"] = new SelectList(_context.BillingCard, "BillingCardId", "BillingCardId", billing.BillingCardId);
             ViewData["CourseId"] = new SelectList(_context.Course, "CourseId", "CourseId", billing.CourseId);
             return RedirectToAction("Details", "Course", new { id = courseid });
 
-            return RedirectToAction(nameof(Index));
         }
 
         // GET: Billing/Edit/5

@@ -44,12 +44,14 @@ namespace BrainBoost.Controllers
                 TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
             string username = User.Identity.Name;
+            //list of currencies available to choose in view 
             List<string> currencies = new List<string>
             {
                 "USD", "EUR", "GBP", "KM"
             };
             SelectList slCurrencies=new SelectList(currencies);
             ViewBag.Currencies = slCurrencies;
+            //returns view for creating course
             return View();
         }
 
@@ -68,23 +70,25 @@ namespace BrainBoost.Controllers
 
                 try
                 {
+                    //creates course with professor data
                     Professor professor = await _context.Professor.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
                     course.CreatedAt = DateTime.Now;
                     course.UpdatedAt = DateTime.Now;
                     course.Professor = professor;
                     course.ProfessorId = professor.UserId;
+                    //saving course to database
                     _context.Add(course);
                     await _context.SaveChangesAsync();
                 }
                 catch {; }
 
+                
             ViewData["ProfessorId"] = new SelectList(_context.Professor, "UserId", "UserId", course.ProfessorId);
-
+                //returns view to invite students to course
                 return RedirectToAction(nameof(InviteStudents), new { id = course.CourseId });
             }
             else { return View(); }
            
-            return View();
         }
 
         // GET: Course/Edit/5
@@ -238,6 +242,7 @@ namespace BrainBoost.Controllers
             }
             if (User.IsInRole("Student"))
             {
+                //gets student's courses
              var courses = _context.CourseProgress
                             .Include(c => c.Course)
                             .ThenInclude(s => s.Professor)
@@ -247,11 +252,12 @@ namespace BrainBoost.Controllers
                 return View(courses);
             }
            else if(User.IsInRole("Professor"))
-            {
+            {//gets professor's courses
                 var courses = _context.Course
                         .Include(s => s.Professor)
                         .Where(c => c.Professor.Username.Equals(User.Identity.Name))
                         .ToList();
+
                 return View("MyCourses(Professor)", courses);
             }
             return NotFound();
@@ -266,6 +272,7 @@ namespace BrainBoost.Controllers
             {
                 TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
+            //courses available for searching
             var courses = _context.Course.Include(c => c.Professor).ToList();
             return View(courses);
         }
@@ -276,7 +283,7 @@ namespace BrainBoost.Controllers
                 var courses = _context.Course.Include(c => c.Professor).ToList();
                 return View("CourseSearch", courses);
             }
-
+            //courses with string from input
             var filteredCourses = _context.Course.Include(c => c.Professor)
                                                 .Where(c => c.CourseName.Contains(searchString))
                                                 .ToList();
@@ -292,6 +299,7 @@ namespace BrainBoost.Controllers
                 return NotFound();
             }
 
+            //gets selected course from database
             var course = await _context.Course
                 .Include(c => c.Professor)
                 .FirstOrDefaultAsync(m => m.CourseId == id);
@@ -301,7 +309,7 @@ namespace BrainBoost.Controllers
             }
             if (User.IsInRole("Student"))
             {
-
+                //finds course progress for student and selected course
                 var username = User.Identity.Name;
                 Student student = await _context.Student.FirstOrDefaultAsync(s => s.Username == username);
                 var courseProgress = await _context.CourseProgress
@@ -310,6 +318,7 @@ namespace BrainBoost.Controllers
 
                 if (courseProgress == null && course.Price == 0)
                 {
+                    //creates course progress if it doesn't exist and course is free
                     CourseProgress courseProgressNew = new CourseProgress();
                     courseProgressNew.StudentId = student.UserId;
                     courseProgressNew.Course = course;
@@ -326,6 +335,7 @@ namespace BrainBoost.Controllers
                 }
                 else if (course.Price > 0)
                 {
+                    //redirects to billing if course is not free
                     ViewData["controller"] = "Billing";
                     ViewData["action"] = "CourseBilling";
                 }
@@ -335,6 +345,7 @@ namespace BrainBoost.Controllers
 
                 if (courseProgress != null && courseProgress.StudentId.Equals(student.UserId))
                 {
+                    //if course is paid, redirects to details
                     // Update the LastAccess property
                     courseProgress.LastAccess = DateTime.Now;
                     ViewData["isEnrolled"] = "true";
@@ -437,6 +448,7 @@ namespace BrainBoost.Controllers
                 Billing billing = await _context.Billing.FirstOrDefaultAsync(b => b.user.UserId == student.UserId && b.CourseId == id);
                 if (courseProgress == null && course.Price == 0)
                 {
+                    //redirects to enroll me page if course is free and student not enrolled
                     ViewData["isEnrolled"] = "false";
                     ViewData["Controller"] = "Course";
                     ViewData["Action"] = "EnrollMe";
@@ -454,6 +466,8 @@ namespace BrainBoost.Controllers
                 }
                 else
                 {
+                    //redirects to billing if course is not free
+
                     ViewData["controller"] = "Billing";
                     ViewData["action"] = "CourseBilling";
                 }
@@ -484,9 +498,11 @@ namespace BrainBoost.Controllers
         }
         public IActionResult InviteStudents(int? id)
         {
+            //gets course and list of all students
             ViewBag.course = _context.Course.FirstOrDefault(c => c.CourseId == id);
 
             List<Student> students = _context.Student.ToList();
+            //returns view with option to select students
             return View(students);
         }
 
