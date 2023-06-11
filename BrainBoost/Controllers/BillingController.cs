@@ -90,21 +90,26 @@ namespace BrainBoost.Controllers
 
              if (billingCard is null)
     {
-        // Add validation error for card number
-        ModelState.AddModelError(nameof(cardNumber), "Card doesn't exist.");
+                // Add validation error for card number
+                TempData["CardError"] = "Card doesn't exist.";
+                ModelState.AddModelError(nameof(cardNumber), "Card doesn't exist.");
     }
     else
     {
         if (billingCard.CVV != cvv)
         {
-            // Add validation error for CVV code
-            ModelState.AddModelError(nameof(cvv), "Wrong CVV code.");
+                    // Add validation error for CVV code
+                    TempData["CVVError"] = "Wrong CVV code.";
+
+                    ModelState.AddModelError(nameof(cvv), "Wrong CVV code.");
         }
 
         if (student.AccountBalance < course.Price)
         {
-            // Add validation error for account balance
-            ModelState.AddModelError(nameof(student.AccountBalance), "Not enough balance in your account.");
+                    // Add validation error for account balance
+                    TempData["BalanceError"] = "Not enough balance in your account.";
+
+                    ModelState.AddModelError(nameof(student.AccountBalance), "Not enough balance in your account.");
         }
     }
 
