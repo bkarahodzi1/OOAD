@@ -1,14 +1,29 @@
 @model IEnumerable<BrainBoost.Models.Feedback>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Feedbacks";
 }
 
-<h1>Index</h1>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<style>
+    .button.active {
+        background-color: #4e73df;
+        color: white;
+    }
+
+    .button:hover {
+        background-color: #858796;
+    }
+</style>
+
+<div style="margin-top: 20px; margin-bottom: 20px" class="text-center">
+
+    <h1>All feedbacks</h1>
+    <div style="margin: auto; width: 600px" class="alert alert-info" role="alert">
+        You can view here all feedbacks from users.
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -25,23 +40,19 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FeedbackId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FeedbackId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FeedbackId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

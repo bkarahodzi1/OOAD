@@ -25,7 +25,7 @@ namespace BrainBoost.Controllers
         ///GET: Billing/CourseBilling
         public async Task<IActionResult> CourseBilling(int id)
         {
-            if (User.IsInRole("Professor"))
+            if (User.IsInRole("Professor") || User.IsInRole("Admin"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }

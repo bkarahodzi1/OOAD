@@ -40,7 +40,7 @@ namespace BrainBoost.Controllers
         // GET: Course/Create
         public IActionResult Create()
         {
-            if(User.IsInRole("Professor"))
+            if(User.IsInRole("Professor") || User.IsInRole("Admin"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
@@ -252,7 +252,7 @@ namespace BrainBoost.Controllers
         }
         public IActionResult MyCourses()
         {
-            if (User.IsInRole("Professor"))
+            if (User.IsInRole("Professor") || User.IsInRole("Admin"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
@@ -284,7 +284,7 @@ namespace BrainBoost.Controllers
         }
         public IActionResult CourseSearch()
         {
-            if (User.IsInRole("Professor"))
+            if (User.IsInRole("Professor") || User.IsInRole("Admin"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
@@ -299,7 +299,7 @@ namespace BrainBoost.Controllers
         }
         public IActionResult Search(string searchString)
         {
-            if (User.IsInRole("Professor"))
+            if (User.IsInRole("Professor") || User.IsInRole("Admin"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
@@ -398,7 +398,7 @@ namespace BrainBoost.Controllers
         }
         public async Task<IActionResult> DetailsForMyCourses(int? id)
         {
-            if (User.IsInRole("Professor"))
+            if (User.IsInRole("Professor") || User.IsInRole("Admin"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }
@@ -445,7 +445,7 @@ namespace BrainBoost.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (User.IsInRole("Professor"))
+            if (User.IsInRole("Professor") || User.IsInRole("Admin"))
             {
                 TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             }

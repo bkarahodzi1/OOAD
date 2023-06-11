@@ -25,7 +25,7 @@ namespace BrainBoost.Controllers
         // GET: Professor
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Professor.ToListAsync());
+              return View(await _context.Professor.Where(p => p.Username != "Admin").ToListAsync());
         }
 
         // GET: Professor/Details/5
@@ -163,7 +163,10 @@ namespace BrainBoost.Controllers
             var professor = await _context.Professor.FindAsync(id);
             if (professor != null)
             {
+
+                var user = await _userManager.FindByNameAsync(professor.Username);
                 _context.Professor.Remove(professor);
+                await _userManager.DeleteAsync(user);
             }
             
             await _context.SaveChangesAsync();
