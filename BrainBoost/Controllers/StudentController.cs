@@ -96,6 +96,11 @@ namespace BrainBoost.Controllers
             {
                 try
                 {
+                    if(student.AccountBalance <= 0 || student.AccountBalance > 10000)
+                    {
+                        TempData["Pare"] = "Entered amount is over limitation.";
+                        return View(student);
+                    }
                     var stu = await _context.Student.FindAsync(id);
                     stu.FirstName = student.FirstName;
                     stu.LastName = student.LastName;
