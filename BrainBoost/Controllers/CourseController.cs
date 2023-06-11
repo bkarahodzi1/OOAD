@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Threading;
 
 namespace BrainBoost.Controllers
 {
@@ -523,10 +524,21 @@ namespace BrainBoost.Controllers
                                 "</body></html>";
                 foreach (Student student in students)
                 {
-                    await _emailSender.SendEmailAsync(
-                    student.Email,
-                    "Invitation for a new course",
-                    body);
+                    try
+                    {
+                        await _emailSender.SendEmailAsync(
+                        student.Email,
+                        "Invitation for a new course",
+                        body);
+                    }
+                    catch(SemaphoreFullException semaphoreFullException)
+                    {
+                        await Task.Delay(5000);
+                        await _emailSender.SendEmailAsync(
+                        student.Email,
+                        "Invitation for a new course",
+                        body);
+                    }
                 }
             }
 
