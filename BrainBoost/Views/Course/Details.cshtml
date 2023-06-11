@@ -106,7 +106,7 @@
         <tbody>
             @foreach (var material in (IEnumerable<BrainBoost.Models.CourseMaterial>)ViewData["CourseMaterials"])
             {
-                <tr class="clickable-row" onclick="location.href='@Url.Action("CourseMaterial", "Course", new { id = material.CourseId })'">
+                <tr class="clickable-row" onclick="location.href='@Url.Action("CourseMaterial", "Course", new { id = material.CourseMaterialId })'">
                     <td>@material.Name</td>
                     <td>@material.Content</td>
                     <td>@material.UpdatedAt</td>
@@ -118,6 +118,10 @@
     else
     {
         <a asp-controller="@controller" asp-action="@action" asp-route-id="@Model.CourseId" class="btn button active2">Course Material</a>
+    }
+    @if (User.IsInRole("Professor") && Model.Professor.Username==User.Identity.Name)
+    {
+        <a asp-controller="Course" asp-action="AddMaterial" asp-route-id="@Model.CourseId" class="btn button active2">Add Course Material</a>
     }
 
 </div>

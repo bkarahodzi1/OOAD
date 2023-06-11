@@ -1,0 +1,82 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    var id = ViewData["id"];
+    bool added = ViewData["AddedNew"] == "true" ? true : false;
+    bool error = ViewData["Error"] == "true" ? true : false;
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+     .search-container {
+         margin-bottom: 10px;
+         vertical-align: central;
+     }
+
+     .input-group {
+         width: 100%;
+     }
+
+     .form-control {
+         width: calc(100% - 90px); /* Adjust the width as per your needs */
+         flex-grow: 1;
+     }
+
+     .button.active {
+         background-color: #4e73df;
+         color: white;
+     }
+
+     .button:hover {
+         background-color: #858796;
+     }
+
+     .clickable-row {
+         cursor: pointer;
+     }
+</style>
+<div style="margin-top: 20px" class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <h1>Add material information</h1>
+        <form asp-controller="Course" asp-action="AddedMaterial" method="get">
+            <input type="hidden" name="id" value=@id>
+            <div class="form-group">
+                <label for="name">Material name:</label>
+                <input type="text" id="name" name="name" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Material description:</label>
+                <input type="text" id="description" name="description" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="content">Material content:</label>
+                <input type="text" id="content" name="content" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="file">Material file:</label>
+                <input type="text" id="file" name="file" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="fileType">Material file type 
+                    (0 - PDF, 1 - DOCX, 2 - PNG, 3 - JPG, 4 - PPTX):
+                </label>
+                <input type="text" id="fileType" name="fileType" class="form-control">
+            </div>
+            @if (added)
+            {
+                <h2>Successfully added</h2>
+            }
+            @if (error)
+            {
+                <h2 style="color: #ff4444" ;>Wrong imput!</h2>
+            }
+            <button type="submit" class="btn form-control button active">Add Material</button>
+        </form>
+    </div>
+</div>
