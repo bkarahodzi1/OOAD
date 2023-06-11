@@ -10,6 +10,7 @@ using BrainBoost.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace BrainBoost.Controllers
 {
@@ -18,11 +19,13 @@ namespace BrainBoost.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public CourseController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public CourseController(UserManager<IdentityUser> userManager, ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         // GET: Course
@@ -483,14 +486,31 @@ namespace BrainBoost.Controllers
         }
 
         [HttpPost]
-        public IActionResult SelectedStudents(List<int> selectedStudents, int? courseId)
+        public async Task<IActionResult> SelectedStudents(List<int> selectedStudents, int? courseId)
         {
             // Process the selected students
             List<Student> students = _context.Student.Where(s => selectedStudents.Contains(s.UserId)).ToList();
 
+            var kurs = _context.Course.FirstOrDefault(c => c.CourseId == courseId);
 
-            if (students.Count > 0) { 
-            //do something with selected students, eg. Send them emails.
+            if (students.Count > 0) {
+                //do something with selected students, eg. Send them emails.
+                string body = $@"<html>
+                            <body>
+                                <p>Dear Student,</p>
+                                <p>We are happy to share the following new course "+ kurs.CourseName + " with you! Professor is inviting you to join new teaching materials via this email.</p>" +
+                                "<p>It will be our pleasure if you decide to be a part of this.</p>" +
+                                "<p>Thank you for using our platform.</p>" +
+                                "<p>Best regards,</p>" +
+                                "<p>Application Team</p>" +
+                                "</body></html>";
+                foreach (Student student in students)
+                {
+                    await _emailSender.SendEmailAsync(
+                    student.Email,
+                    "Invitation for a new course",
+                    body);
+                }
             }
 
 
