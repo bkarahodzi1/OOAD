@@ -35,6 +35,14 @@
                     </ul>
                 </div>
             }
+            @if (TempData["Pare"] != null)
+            {
+                <div class="text-danger">
+                    <ul>
+                        <li>@TempData["Pare"]</li>
+                    </ul>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="AccountBalance" class="control-label"></label>
                 <input asp-for="AccountBalance" class="form-control" />

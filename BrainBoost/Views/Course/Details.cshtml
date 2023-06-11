@@ -34,6 +34,10 @@
 
 <div>
     <h4 class="float-left">Course</h4>
+    @if (@Model.Price > 0 && isEnrolled)
+    {
+        <a asp-controller="Course" asp-action="RefundConfirmation" asp-route-id="@Model.CourseId" class="btn btn-danger float-right">Refund</a>
+    }
     @if (!User.IsInRole("Professor") && !isEnrolled)
     {
         <a asp-controller="@controller" asp-action="@action" asp-route-id="@Model.CourseId" class="btn button active float-right">Enroll me</a>
