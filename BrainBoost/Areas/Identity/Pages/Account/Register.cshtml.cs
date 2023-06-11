@@ -84,7 +84,6 @@ namespace BrainBoost.Areas.Identity.Pages.Account
 
             [Display(Name = "Date of birth")]
             [DataType(DataType.Date)]
-            [Range(typeof(DateTime), "1/1/1900", "12/31/2019", ErrorMessage = "Date of birth must be between 01/01/1900 and 01/01/2020.")]
             public DateTime BirthDate { get; set; }
         }
 
