@@ -9,11 +9,11 @@ namespace BrainBoost.Models
         public int UserId { get; set; }
 
         [Display(Name = "First name")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "First name must contain only letters.")]
+        [RegularExpression("^[a-zA-Zčćšž]+$", ErrorMessage = "First name must contain only letters.")]
         public string FirstName { get; set; }
 
         [Display(Name = "Last name")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Last name can only contain letters.")]
+        [RegularExpression("^[a-zA-Zčćžš]+$", ErrorMessage = "Last name can only contain letters.")]
         public string LastName { get; set; }
 
         [Display(Name = "Username")]
