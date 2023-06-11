@@ -164,6 +164,8 @@ namespace BrainBoost.Controllers
                 //saving to database
                 _context.Add(courseProgress);
             _context.Add(billing);
+                student.AccountBalance = (double)(student.AccountBalance - course.Price);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Course", new { id = courseid });
 
