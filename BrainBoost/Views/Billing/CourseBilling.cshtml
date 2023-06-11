@@ -1,6 +1,8 @@
 ﻿@model BrainBoost.Models.BillingCard
 
 @using System.Globalization
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 @{
     ViewData["Title"] = "Course Billing";
     var course = ViewBag.course;
@@ -8,11 +10,20 @@
 
 }
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .button.active {
+        background-color: #4e73df;
+        color: white;
+    }
 
-<div class="text-center">
-    <h1 class="display-4">Course Billing</h1>
-    <p>Are you sure you want to pay for course @course.CourseName ?</p>
+    .button:hover {
+        background-color: #858796;
+    }
+</style>
+
+<div style="margin-top: 20px" class="text-center">
+    <h1>Course Billing</h1>
+    <p>Are you sure you want to pay for course @course.CourseName?</p>
 </div>
 
 <div class="row justify-content-center mt-4">
@@ -21,26 +32,26 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
-           
+
             <div class="form-group">
-                    <label asp-for="ExpiryMonth" class="control-label"></label>
-                    <select asp-for="ExpiryMonth" class="form-control" required>
+                <label asp-for="ExpiryMonth" class="control-label"></label>
+                <select asp-for="ExpiryMonth" class="form-control" required>
                     @for (int i = 1; i <= 12; i++)
                     {
                         string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i);
                         <option value="@i.ToString("D2")">@monthName</option>
                     }
-				</select>
+                </select>
                 <span asp-validation-for="ExpiryMonth" class="text-danger"></span>
             </div>
             <div class="form-group">
-                    <label asp-for="ExpiryYear" class="control-label"></label>
-                    <select asp-for="ExpiryYear" class="form-control" required>
+                <label asp-for="ExpiryYear" class="control-label"></label>
+                <select asp-for="ExpiryYear" class="form-control" required>
                     @for (int i = DateTime.Now.Year; i <= DateTime.Now.Year + 10; i++)
                     {
                         <option value="@i.ToString()">@i.ToString()</option>
                     }
-                    </select>
+                </select>
                 <span asp-validation-for="ExpiryYear" class="text-danger"></span>
             </div>
 
@@ -69,19 +80,22 @@
                 </div>
             }
 
-            <div class="form-group">
-                <label class="control-label">Amount to be Paid:</label>
-                <label id="amountLabel" class="form-control-label">@priceText</label>
-            </div>
             @if (TempData["BalanceError"] != null)
             {
                 <div class="alert alert-danger">
                     @TempData["BalanceError"]
                 </div>
             }
-			<button type="submit" class="btn btn-primary" style="float:right;">Pay</button>
 
-		</form><!--asp-route-courseid=@course.CourseId -->
+            <div style="height: 50px" class="alert alert-info" role="alert">
+                <label class="control-label">Amount to be Paid:</label>
+                <label id="amountLabel" class="form-control-label">@priceText</label>
+            </div>
+
+
+            <button type="submit" class="w-100 btn button active" style="float:right;">Pay</button>
+
+        </form><!--asp-route-courseid=@course.CourseId -->
        
         
     </div>

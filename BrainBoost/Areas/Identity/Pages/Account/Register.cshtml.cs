@@ -70,12 +70,12 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
-            [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters.")]
+            [RegularExpression("^[a-zA-Zčćžš]+$", ErrorMessage = "First name can only contain letters.")]
             [Display(Name = "First name")]
             public string FirstName { get; set; }
 
             [Required]
-            [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Last name can only contain letters.")]
+            [RegularExpression("^[a-zA-Zčćžš]+$", ErrorMessage = "Last name can only contain letters.")]
             [Display(Name = "Last name")]
             public string LastName { get; set; }
 
@@ -101,6 +101,15 @@ namespace BrainBoost.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            int age = 0;
+            age = DateTime.Now.Subtract(Input.BirthDate).Days;
+            age = age / 365;
+            Console.WriteLine("BirthDate = ${0}, ages = ${1}", Input.BirthDate, age);
+            if(age <= 16)
+            {
+                TempData["EmailPostoji"] = "You must be at least 16 years old to register!";
+                return Page();
+            }
             returnUrl ??= Url.Content("~/Home/HomeCourses");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)

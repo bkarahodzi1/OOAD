@@ -29,7 +29,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @if (TempData["Podaci"] != null)
             {
-                <div class="alert alert-success">
+                <div style="height: 50px" class="alert alert-success">
                     <ul>
                         <li>@TempData["Podaci"]</li>
                     </ul>
@@ -61,7 +61,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" />
+                <input asp-for="BirthDate" class="form-control" readonly />
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
             <div style="margin-top: 20px" class="form-group">
