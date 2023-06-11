@@ -34,7 +34,7 @@
 
 <div>
     <h4 class="float-left">Course</h4>
-    @if (@Model.Price > 0 && isEnrolled)
+    @if (@Model.Price > 0 && isEnrolled && User.IsInRole("Student"))
     {
         <a asp-controller="Course" asp-action="RefundConfirmation" asp-route-id="@Model.CourseId" class="btn btn-danger float-right">Refund</a>
     }
