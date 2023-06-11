@@ -292,6 +292,7 @@ namespace BrainBoost.Controllers
             }
             //courses available for searching
             var courses = _context.Course.Include(c => c.Professor).ToList();
+            ViewData["Search"] = "";
             return View(courses);
         }
         public IActionResult Search(string searchString)
@@ -299,13 +300,14 @@ namespace BrainBoost.Controllers
             if (string.IsNullOrWhiteSpace(searchString))
             {
                 var courses = _context.Course.Include(c => c.Professor).ToList();
+                ViewData["Search"] = "";
                 return View("CourseSearch", courses);
             }
             //courses with string from input
             var filteredCourses = _context.Course.Include(c => c.Professor)
                                                 .Where(c => c.CourseName.Contains(searchString))
                                                 .ToList();
-
+            ViewData["Search"] = searchString;
             return View("CourseSearch", filteredCourses);
         }
         
