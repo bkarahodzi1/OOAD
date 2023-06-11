@@ -4,10 +4,10 @@
     var courseCurrency = TempData["CourseCurrency"];
 }
 
-<h2>@ViewData["Title"]</h2>
+<h1>@ViewData["Title"]</h1>
 
-<h2>Are You sure You want to refund money from course: @courseName, which costs @coursePrice @courseCurrency?</h2>
+<h2 style="color:black;">Are You sure You want to refund money from course: @courseName, which costs @coursePrice @courseCurrency?</h2>
 
 <a asp-action="RefundForm" class="btn btn-primary">Yes</a>
 
-<a asp-action="Details" class="btn btn-secondary">No</a>
+<a asp-action="MyCourses" class="btn btn-secondary">No</a>
