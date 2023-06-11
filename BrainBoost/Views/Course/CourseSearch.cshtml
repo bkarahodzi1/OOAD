@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Search courses";
+    var searchF = ViewData["Search"];
 }
 <!DOCTYPE html>
 <html>
@@ -42,7 +43,14 @@
     <div class="search-container">
         <form asp-controller="Course" asp-action="Search" method="get">
             <div class="input-group">
-                <input type="text" id="searchInput" name="searchString" placeholder="Search for a course..." class="form-control">
+                @if (!searchF.Equals(""))
+                {
+                    <input type="text" id="searchInput" name="searchString" placeholder="Search for a course..." class="form-control" value=@searchF>
+                }
+                else
+                {
+                    <input type="text" id="searchInput" name="searchString" placeholder="Search for a course..." class="form-control">
+                }
                 <div class="input-group-append">
                     <button type="submit" class="btn button active">Search</button>
                 </div>
