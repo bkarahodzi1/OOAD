@@ -298,6 +298,14 @@ namespace BrainBoost.Controllers
         }
         public IActionResult Search(string searchString)
         {
+            if (User.IsInRole("Professor"))
+            {
+                TempData["Kljuc"] = _context.Professor.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
+            else
+            {
+                TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
+            }
             if (string.IsNullOrWhiteSpace(searchString))
             {
                 var courses = _context.Course.Include(c => c.Professor).ToList();
@@ -533,6 +541,7 @@ namespace BrainBoost.Controllers
                     }
                     catch(SemaphoreFullException semaphoreFullException)
                     {
+                        // Handling exception because of big number of async calls, problem solved with delay method
                         await Task.Delay(5000);
                         await _emailSender.SendEmailAsync(
                         student.Email,

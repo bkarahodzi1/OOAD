@@ -72,6 +72,7 @@ namespace BrainBoost.Controllers
         // GET: Student/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            // Kljuc represents id that should be sent to view
             TempData["Kljuc"] = _context.Student.FirstOrDefault(p => p.Username == User.Identity.Name).UserId;
             if (id == null || _context.Student == null)
             {
@@ -97,6 +98,7 @@ namespace BrainBoost.Controllers
             {
                 try
                 {
+                    // Validations
                     if (student.AccountBalance <= 0 || student.AccountBalance > 10000)
                     {
                         TempData["Pare"] = "Entered amount is over limitation.";
@@ -115,6 +117,7 @@ namespace BrainBoost.Controllers
                         TempData["Pare"] = "You must be at least 6 years old to register!";
                         return View(student);
                     }
+                    // Making changes on model that is already in database
                     stu.FirstName = student.FirstName;
                     stu.LastName = student.LastName;
                     stu.BirthDate = student.BirthDate;
