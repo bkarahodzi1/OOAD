@@ -1,10 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Refund Confirmation";
+    var courseName = TempData["CourseName"];
+    var coursePrice = TempData["CoursePrice"];
+    var courseCurrency = TempData["CourseCurrency"];
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<p>Jeste li sigurni da želite refundirati novac?</p>
+<h2>Jeste li sigurni da želite refundirati novac sa kursa @courseName, sa cijenom @coursePrice @courseCurrency?</h2>
 
 <a asp-action="RefundForm" class="btn btn-primary">Da</a>
 

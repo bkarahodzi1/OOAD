@@ -213,8 +213,15 @@ namespace BrainBoost.Controllers
             return View();
         }
 
-        public IActionResult RefundConfirmation()
+        public IActionResult RefundConfirmation(int id)
         {
+            var userId = User.Identity.Name;
+            bool isEnrolled = _context.CourseProgress.Any(cp => cp.CourseId == id && cp.StudentId.ToString() == userId);
+            var course = _context.Course.Find(id);
+            TempData["CourseName"] = course.CourseName;
+            TempData["CoursePrice"] = course.Price;
+            TempData["CourseCurrency"] = course.Currency;
+            ViewData["IsEnrolled"] = isEnrolled;
             return View();
         }
 
