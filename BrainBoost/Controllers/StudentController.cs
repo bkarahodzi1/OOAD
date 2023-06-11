@@ -100,6 +100,7 @@ namespace BrainBoost.Controllers
                     stu.FirstName = student.FirstName;
                     stu.LastName = student.LastName;
                     stu.BirthDate = student.BirthDate;
+                    stu.AccountBalance = student.AccountBalance;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
