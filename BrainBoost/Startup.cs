@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ namespace BrainBoost
 {
     public class Startup
     {
+        private static SqlConnection _connection;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +30,16 @@ namespace BrainBoost
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<SqlConnection>(provider =>
+            {
+                if (_connection == null)
+                {
+                    _connection = new SqlConnection(Configuration.GetConnectionString("DefaultConnection"));
+                    _connection.Open();
+                }
+
+                return _connection;
+            });
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -62,6 +75,10 @@ namespace BrainBoost
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbConnection = serviceScope.ServiceProvider.GetRequiredService<SqlConnection>();
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
