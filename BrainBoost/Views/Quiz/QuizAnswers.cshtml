@@ -1,8 +1,14 @@
-﻿@{
+﻿@model BrainBoost.Controllers.QuizAnswersViewModel
+
+@{
     ViewData["Title"] = "Quiz Answers";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Quiz Answers</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<h1>Quiz Answers</h1>
+
+<p>Number of Correct Answers: @Model.CorrectCount</p>
+<p>Number of Incorrect Answers: @Model.IncorrectCount</p>
+
+
+

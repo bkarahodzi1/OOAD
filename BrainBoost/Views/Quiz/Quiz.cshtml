@@ -1,8 +1,20 @@
-﻿@{
+﻿@model BrainBoost.Controllers.QuizViewModel
+@{
     ViewData["Title"] = "Quiz";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Quiz</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Quiz</h1>
+
+<form action="/Quiz/SubmitQuiz" method="post">
+
+    @foreach (var question in Model.allQuestions)
+    {
+        <div>
+            <h4>@question.QuestionText</h4>
+            <input type="text" name="answers[@question.QuestionId]" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary" style="float:left;">Submit Quiz</button>
+
+</form>

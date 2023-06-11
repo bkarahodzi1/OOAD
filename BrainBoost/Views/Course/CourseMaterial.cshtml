@@ -35,4 +35,6 @@
         <strong>Updated:</strong>
         <p>@Html.DisplayFor(model => model.UpdatedAt)</p>
     </div>
+    <a  asp-controller="Quiz" asp-action="Quiz" asp-route-courseMaterialId="@Model.CourseMaterialId" class="btn btn-primary" style="float:left;">Quiz</a>
+
 </div>

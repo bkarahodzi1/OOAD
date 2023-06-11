@@ -19,12 +19,7 @@ namespace BrainBoost.Controllers
             _context = context;
         }
 
-        // GET: Quiz
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Quiz.Include(q => q.CourseMaterial).Include(q => q.CreatedBy);
-            return View(await applicationDbContext.ToListAsync());
-        }
+       
 
         // GET: Quiz/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -171,16 +166,88 @@ namespace BrainBoost.Controllers
           return _context.Quiz.Any(e => e.QuizId == id);
         }
 
-        ///GET: Quiz/Quiz
-        public IActionResult Quiz()
+
+
+        // GET: Quiz/Quiz
+        public async Task<IActionResult> Quiz(int courseMaterialId)
         {
-            return View();
+            var courseMaterial = await _context.CourseMaterial.FindAsync(courseMaterialId);
+
+            if (courseMaterial == null)
+            {
+                // Course material not found, handle the error accordingly
+                return NotFound();
+            }
+
+            var quiz = await _context.Quiz
+                .FirstOrDefaultAsync(q => q.CourseMaterialId == courseMaterialId);
+
+            var questions = await _context.Question
+            .Where(q => q.QuizId == quiz.QuizId).ToListAsync();
+
+            if (quiz == null)
+            {
+                // Quiz not found, handle the error accordingly
+                return NotFound();
+            }
+
+            return View(new QuizViewModel
+            {
+                Quiz = quiz,
+                allQuestions=questions
+            });
         }
 
-        ///GET: Quiz/QuizAnswers
-        public IActionResult QuizAnswers()
-        {
-            return View();
+        // POST: /Quiz/SubmitQuiz
+        [HttpPost]
+        public async Task<IActionResult> SubmitQuiz(Dictionary<int, string> answers)
+        { int correct = 0;
+            int incorrect = 0;
+            // Process the submitted answers
+            foreach (var answersItem in answers) {
+                var questionId = answersItem.Key;
+                var userAnswer = answersItem.Value ?? string.Empty;
+
+                // Retrieve the correct answer from the database for the question
+                var correctAnswer = await _context.QuestionAnswer
+            .Where(a => a.QuestionId == questionId && (bool?)a.IsCorrect == true)
+            .Select(a => a.Answer )
+            .FirstOrDefaultAsync();
+
+                if (string.Equals(userAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase))
+                    correct++;
+                
+                else incorrect++;
+            }
+
+            return RedirectToAction(nameof(QuizAnswers), new { correctCount = correct, incorrectCount = incorrect });
+
         }
+
+        public IActionResult QuizAnswers( int correctCount, int incorrectCount)
+        {
+            // Show the quiz result page
+            var viewModel = new QuizAnswersViewModel
+            {
+                CorrectCount = correctCount,
+                IncorrectCount = incorrectCount
+            };
+
+            // Pass the view model to the view
+            return View(viewModel);
+        }
+
+
+    }
+
+    public class QuizViewModel
+    {
+        public Quiz Quiz { get; set; }
+        public List<Question> allQuestions { get; set; }
+    }
+    public class QuizAnswersViewModel
+    {
+        public int CorrectCount { get; set; }
+        public int IncorrectCount { get; set; }
     }
 }
