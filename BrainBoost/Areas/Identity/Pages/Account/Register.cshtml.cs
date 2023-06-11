@@ -104,10 +104,9 @@ namespace BrainBoost.Areas.Identity.Pages.Account
             int age = 0;
             age = DateTime.Now.Subtract(Input.BirthDate).Days;
             age = age / 365;
-            Console.WriteLine("BirthDate = ${0}, ages = ${1}", Input.BirthDate, age);
-            if(age <= 16)
+            if(age < 6)
             {
-                TempData["EmailPostoji"] = "You must be at least 16 years old to register!";
+                TempData["EmailPostoji"] = "You must be at least 6 years old to register!";
                 return Page();
             }
             returnUrl ??= Url.Content("~/Home/HomeCourses");

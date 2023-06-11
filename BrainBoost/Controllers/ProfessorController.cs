@@ -97,6 +97,18 @@ namespace BrainBoost.Controllers
                 try
                 {
                     var profa = await _context.Professor.FindAsync(id);
+                    if (profa.FirstName == professor.FirstName && profa.LastName == professor.LastName && profa.BirthDate == professor.BirthDate)
+                    {
+                        return View(professor);
+                    }
+                    int age = 0;
+                    age = DateTime.Now.Subtract(professor.BirthDate).Days;
+                    age = age / 365;
+                    if (age < 6)
+                    {
+                        TempData["Datum"] = "You must be at least 6 years old to register!";
+                        return View(professor);
+                    }
                     profa.FirstName = professor.FirstName;
                     profa.LastName = professor.LastName;
                     profa.BirthDate = professor.BirthDate;

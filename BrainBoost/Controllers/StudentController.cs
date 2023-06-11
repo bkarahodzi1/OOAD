@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BrainBoost.Data;
 using BrainBoost.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Text.RegularExpressions;
 
 namespace BrainBoost.Controllers
 {
@@ -102,6 +103,18 @@ namespace BrainBoost.Controllers
                         return View(student);
                     }
                     var stu = await _context.Student.FindAsync(id);
+                    if (stu.FirstName == student.FirstName && stu.LastName == student.LastName && stu.BirthDate == student.BirthDate && stu.AccountBalance == student.AccountBalance)
+                    {
+                        return View(student);
+                    }
+                    int age = 0;
+                    age = DateTime.Now.Subtract(student.BirthDate).Days;
+                    age = age / 365;
+                    if (age < 6)
+                    {
+                        TempData["Pare"] = "You must be at least 6 years old to register!";
+                        return View(student);
+                    }
                     stu.FirstName = student.FirstName;
                     stu.LastName = student.LastName;
                     stu.BirthDate = student.BirthDate;
