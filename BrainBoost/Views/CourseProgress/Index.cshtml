@@ -39,7 +39,7 @@ else
             {
                 <tr>
                     <td>
-                        <a asp-area="" asp-controller="Home" asp-action="Index">
+                        <a asp-area="" asp-controller="CourseProgress" asp-action="CourseStatistics" asp-route-id="@item.Course.CourseId">
                             @Html.DisplayFor(modelItem => item.Course.CourseName)
                         </a>
                         
